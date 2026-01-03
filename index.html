@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MVP Citations — Fit du jour</title>
+  <style>
+    :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    body { margin: 0; background: #0b0c10; color: #eaf0ff; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .card { background: #11131a; border: 1px solid #1f2433; border-radius: 16px; padding: 18px; }
+    h1 { font-size: 18px; margin: 0 0 10px; }
+    h2 { font-size: 14px; margin: 18px 0 8px; opacity: 0.9; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 740px){ .row { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 13px; margin-bottom: 6px; opacity: 0.9; }
+    select {
+      width: 100%; padding: 10px 12px; border-radius: 12px;
+      border: 1px solid #2a3145; background: #0c0e14; color: #eaf0ff;
+      outline: none;
+    }
+    .muted { font-size: 12px; opacity: 0.75; line-height: 1.4; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    button {
+      border: 1px solid #2a3145; background: #0c0e14; color: #eaf0ff;
+      padding: 10px 12px; border-radius: 12px; cursor: pointer;
+    }
+    button.primary { background: #1b3cff; border-color: #1b3cff; }
+    .quote {
+      font-size: 22px; line-height: 1.45; padding: 18px 14px; margin-top: 14px;
+      border-radius: 16px; border: 1px dashed #2a3145; background: #0c0e14;
+    }
+    .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .pill { font-size: 12px; padding: 6px 10px; border-radius: 999px; border: 1px solid #2a3145; opacity: 0.9; }
+    .hr { height: 1px; background: #1f2433; margin: 18px 0; }
+    .small { font-size: 12px; opacity: 0.8; }
+    .right { text-align: right; }
+    .grid2 { display:grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="grid2">
+      <h1>📌 MVP Citations — Fit du jour</h1>
+      <div class="small" id="today"></div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="need">Besoin (prioritaire)</label>
+          <select id="need">
+            <option value="">—</option>
+            <option value="calme">Calme</option>
+            <option value="réconfort">Réconfort</option>
+            <option value="clarté">Clarté</option>
+            <option value="élan">Élan</option>
+            <option value="lâcher-prise">Lâcher-prise</option>
+            <option value="perspective">Perspective</option>
+          </select>
+          <div class="muted">Si tu choisis un besoin, il <b>écrase</b> le reste.</div>
+        </div>
+
+        <div>
+          <label for="mood">Humeur (secondaire)</label>
+          <select id="mood">
+            <option value="">—</option>
+            <option value="bien">Bien</option>
+            <option value="neutre">Neutre</option>
+            <option value="fatigué">Fatigué</option>
+            <option value="stressé">Stressé</option>
+            <option value="triste">Triste</option>
+            <option value="motivé">Motivé</option>
+          </select>
+          <div class="muted">Optionnel. Sert à affiner, jamais à décider seule.</div>
+        </div>
+      </div>
+
+      <h2>Préférences</h2>
+      <div class="row">
+        <div>
+          <label for="tonePref">Ton préféré</label>
+          <select id="tonePref">
+            <option value="">—</option>
+            <option value="accompagnant">Accompagnant</option>
+            <option value="neutre">Neutre</option>
+            <option value="direct">Direct</option>
+            <option value="stoïque">Stoïque</option>
+            <option value="poétique">Poétique</option>
+          </select>
+        </div>
+        <div>
+          <label for="energyCap">Énergie max (garde-fou)</label>
+          <select id="energyCap">
+            <option value="3">3 (tout)</option>
+            <option value="2">2 (éviter trop intense)</option>
+            <option value="1">1 (très doux)</option>
+          </select>
+        </div>
+      </div>
+
+      <h2>Contexte (externes)</h2>
+      <div class="row">
+        <div>
+          <label for="dayLoad">Charge du jour (calendrier)</label>
+          <select id="dayLoad">
+            <option value="">—</option>
+            <option value="dense">Journée dense</option>
+            <option value="moyenne">Moyenne</option>
+            <option value="light">Plutôt légère</option>
+          </select>
+        </div>
+        <div>
+          <label for="weather">Météo / ambiance</label>
+          <select id="weather">
+            <option value="">—</option>
+            <option value="gris">Gris / Pluie</option>
+            <option value="neutre">Neutre</option>
+            <option value="soleil">Soleil</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="btnDaily">Proposer la citation du jour</button>
+        <button id="btnNew">Une autre</button>
+        <button id="btnReset">Réinitialiser</button>
+      </div>
+
+      <div id="quoteBox" class="quote" style="display:none;"></div>
+      <div id="metaBox" class="meta" style="display:none;"></div>
+
+      <div class="actions" id="feedbackRow" style="display:none;">
+        <button id="btnUp">👍 Ça m’a parlé</button>
+        <button id="btnMid">😐 OK</button>
+        <button id="btnDown">👎 Pas du tout</button>
+        <button id="btnCopy">Copier</button>
+      </div>
+
+      <div class="hr"></div>
+      <div class="muted">
+        <b>Règles :</b> Besoin/Humeur déclarés &gt; externes. Externes ajustent la forme (ton/longueur) et le timing. Historique + feedback pour affiner.
+      </div>
+      <div class="small right">Set : 72 citations FR taguées.</div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
