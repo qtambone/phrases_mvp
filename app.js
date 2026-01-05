@@ -140,11 +140,20 @@ let ALL=[], CURRENT=null;
   document.getElementById("btnDaily").addEventListener("click",()=>{
     const ctx=ctxFromUI();
     const daily=getJ(STORAGE.daily);
+    const hist=getJ(STORAGE.history);
+    const seen=hist.seen||[];
     const key=todayKey();
     if(daily.key===key && daily.citationId){
       const c=ALL.find(x=>x.id===daily.citationId);
-      if(c){ CURRENT=c; render(c); return; }
+      // Si la citation quotidienne existe et n'a pas été vue, l'afficher
+      if(c && !seen.includes(c.id)){
+        CURRENT=c;
+        render(c);
+        pushSeen(c.id); // L'ajouter à l'historique
+        return;
+      }
     }
+    // Sinon, choisir une nouvelle citation
     const c=pick(ALL,ctx); if(!c) return;
     CURRENT=c; render(c); pushSeen(c.id);
     setJ(STORAGE.daily,{key,citationId:c.id,ctx,at:new Date().toISOString()});
