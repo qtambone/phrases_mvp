@@ -50,6 +50,19 @@ function pick(all,ctx){
   const cap=parseInt(ctx.energyCap || prefs.energyCap || "3",10);
 
   let pool=all.slice();
+  
+  // Exclure les citations déjà vues par cet utilisateur
+  const seen = hist.seen || [];
+  pool = pool.filter(c => !seen.includes(c.id));
+  
+  // Si toutes les citations ont été vues, réinitialiser l'historique
+  if(pool.length === 0) {
+    console.log("🔄 Toutes les citations ont été vues, réinitialisation de l'historique");
+    hist.seen = [];
+    setJ(STORAGE.history, hist);
+    pool = all.slice();
+  }
+  
   if(ctx.need) pool=pool.filter(x=>x.need===ctx.need);
   pool=pool.filter(x=>safetyFilter(x,ctx.mood||null,cap));
   if(pool.length===0){
