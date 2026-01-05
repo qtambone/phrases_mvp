@@ -30,13 +30,6 @@ function score(c,ctx,hist){
   if(hb==="soir"){ if(c.energy===1) s+=0.02; if(c.tone==="poétique"||c.tone==="stoïque") s+=0.01; }
   else if(hb==="matin"){ if(c.energy>=2 && c.tone!=="accompagnant") s+=0.01; }
 
-  const seen=hist.seen||[];
-  const i=seen.lastIndexOf(c.id);
-  if(i!==-1){
-    const dist=(seen.length-1)-i;
-    if(dist<14) s-=(0.20-dist*0.01);
-  }
-
   const likes=hist.likes||{};
   if(likes[`need:${c.need}`]) s+=clamp(likes[`need:${c.need}`]*0.02,0,0.08);
   if(likes[`tone:${c.tone}`]) s+=clamp(likes[`tone:${c.tone}`]*0.015,0,0.06);
@@ -66,7 +59,8 @@ function pick(all,ctx){
   if(ctx.need) pool=pool.filter(x=>x.need===ctx.need);
   pool=pool.filter(x=>safetyFilter(x,ctx.mood||null,cap));
   if(pool.length===0){
-    pool=all.filter(x=>!x.is_injunctive&&!x.is_guilt_inducing&&!x.is_toxic_positive).filter(x=>x.energy<=cap);
+    // Fallback mais toujours en excluant les citations vues
+    pool=all.filter(x=>!seen.includes(x.id) && !x.is_injunctive && !x.is_guilt_inducing && !x.is_toxic_positive && x.energy<=cap);
   }
   const scored=pool.map(c=>({c,s:score(c,ctx,hist)})).sort((a,b)=>b.s-a.s);
   const top=scored.slice(0,Math.min(8,scored.length));
