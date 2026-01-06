@@ -13,6 +13,12 @@ function hasCompletedOnboarding(prefs){
 
 function qs(id){return document.getElementById(id);}
 
+function on(id, eventName, handler){
+  const el = qs(id);
+  if(!el) return;
+  el.addEventListener(eventName, handler);
+}
+
 function show(el,yes){ if(!el) return; el.style.display = yes ? "block" : "none"; }
 
 function openSettings(){
@@ -42,6 +48,14 @@ function updateSubtitle(){
   if(!el) return;
   if(hasCompletedOnboarding(p)) el.textContent=`Ton : ${tone} • Énergie max : ${energy}`;
   else el.textContent="Une citation courte, au bon niveau d’énergie.";
+}
+
+function resetQuoteUI(){
+  if(qs("quoteBox")) qs("quoteBox").style.display="none";
+  if(qs("feedbackRow")) qs("feedbackRow").style.display="none";
+  if(qs("detailsRow")) qs("detailsRow").style.display="none";
+  if(qs("detailsBox")) qs("detailsBox").style.display="none";
+  if(qs("btnToggleDetails")) qs("btnToggleDetails").textContent="Détails";
 }
 
 function safetyFilter(c,mood,cap){
@@ -161,6 +175,21 @@ function ctxFromUI(){
   };
 }
 
+function setSelectedByDataAttr(attrName, attrValue){
+  document.querySelectorAll(`[${attrName}]`).forEach((el)=>{
+    if(!(el instanceof HTMLElement)) return;
+    const isSelected = el.getAttribute(attrName) === attrValue;
+    el.classList.toggle("selected", Boolean(attrValue) && isSelected);
+  });
+}
+
+function clearSelectedByDataAttr(attrName){
+  document.querySelectorAll(`[${attrName}]`).forEach((el)=>{
+    if(!(el instanceof HTMLElement)) return;
+    el.classList.remove("selected");
+  });
+}
+
 function syncPrefsIntoSettings(){
   const p=getJ(STORAGE.prefs);
   qs("setTone").value=p.tonePref||"";
@@ -189,6 +218,18 @@ function feedback(c,kind){
 }
 
 let ALL=[], CURRENT=null, LAST_CTX=null;
+let ALL_LOADED=false;
+let ALL_LOAD_ERROR=null;
+
+function ensureCitationsReady(){
+  if(ALL_LOADED && Array.isArray(ALL) && ALL.length) return true;
+  if(ALL_LOAD_ERROR){
+    alert("Impossible de charger les citations. Vérifie que tu ouvres via un serveur (ex: http://localhost:8000) et recharge la page.");
+    return false;
+  }
+  alert("Chargement des citations… réessaie dans une seconde.");
+  return false;
+}
 
 (async function init(){
   // Init prefs defaults (sans déclencher l'onboarding comme "fait")
@@ -198,7 +239,19 @@ let ALL=[], CURRENT=null, LAST_CTX=null;
   setJ(STORAGE.prefs,prefs);
   updateSubtitle();
 
-  ALL=await loadJSON("citations.json");
+  // Charger les citations sans bloquer le branchement des interactions UI
+  ALL=[];
+  ALL_LOADED=false;
+  ALL_LOAD_ERROR=null;
+  loadJSON("citations.json")
+    .then((data)=>{
+      ALL=Array.isArray(data)?data:[];
+      ALL_LOADED=true;
+    })
+    .catch((err)=>{
+      ALL_LOAD_ERROR=String(err && err.message ? err.message : err);
+      console.error("Erreur chargement citations.json:", err);
+    });
 
   // UI: onboarding vs main
   const completed=hasCompletedOnboarding(getJ(STORAGE.prefs));
@@ -206,16 +259,23 @@ let ALL=[], CURRENT=null, LAST_CTX=null;
   show(qs("mainScreen"),completed);
   qs("btnOpenSettings").style.visibility = completed ? "visible" : "hidden";
 
+  // Flow séquentiel: besoin -> humeur -> bouton
+  if(qs("need")) qs("need").value="";
+  if(qs("mood")) qs("mood").value="";
+  resetQuoteUI();
+  if(qs("moodStep")) qs("moodStep").style.display="none";
+  if(qs("quoteActionRow")) qs("quoteActionRow").style.display="none";
+
   // Settings open/close
-  qs("btnOpenSettings").addEventListener("click",()=>{
+  on("btnOpenSettings","click",()=>{
     syncPrefsIntoSettings();
     openSettings();
   });
-  qs("btnCloseSettings").addEventListener("click",closeSettings);
-  qs("settingsOverlay").addEventListener("click",closeSettings);
+  on("btnCloseSettings","click",closeSettings);
+  on("settingsOverlay","click",closeSettings);
 
   // Onboarding
-  qs("btnFinishOnboarding").addEventListener("click",()=>{
+  on("btnFinishOnboarding","click",()=>{
     const tone=qs("obTone").value||"";
     const energy=parseInt(qs("obEnergy").value||"2",10);
     if(!tone){
@@ -234,7 +294,7 @@ let ALL=[], CURRENT=null, LAST_CTX=null;
   });
 
   // Save settings
-  qs("btnSaveSettings").addEventListener("click",()=>{
+  on("btnSaveSettings","click",()=>{
     const tone=qs("setTone").value||"";
     const energy=parseInt(qs("setEnergy").value||"2",10);
     if(!tone){
@@ -250,7 +310,41 @@ let ALL=[], CURRENT=null, LAST_CTX=null;
   });
 
   // Main flow
-  qs("btnGetQuote").addEventListener("click",()=>{
+  // Sélection du besoin (chips + cards + quiz)
+  document.querySelectorAll("[data-need]").forEach((btn)=>{
+    btn.addEventListener("click",()=>{
+      const need = btn.getAttribute("data-need") || "";
+      if(!need) return;
+
+      if(qs("need")) qs("need").value = need;
+      setSelectedByDataAttr("data-need", need);
+
+      // On passe à l'étape humeur
+      if(qs("moodStep")) qs("moodStep").style.display = "block";
+
+      // Reset humeur + action tant que l'humeur n'est pas choisie
+      if(qs("mood")) qs("mood").value = "";
+      clearSelectedByDataAttr("data-mood");
+      if(qs("quoteActionRow")) qs("quoteActionRow").style.display = "none";
+
+      // Si on change de besoin après avoir vu une citation, on cache l'ancienne
+      resetQuoteUI();
+    });
+  });
+
+  // Sélection de l'humeur
+  document.querySelectorAll("[data-mood]").forEach((btn)=>{
+    btn.addEventListener("click",()=>{
+      const mood = btn.getAttribute("data-mood") || "";
+      if(!mood) return;
+      if(qs("mood")) qs("mood").value = mood;
+      setSelectedByDataAttr("data-mood", mood);
+      if(qs("quoteActionRow")) qs("quoteActionRow").style.display = "flex";
+      resetQuoteUI();
+    });
+  });
+
+  on("btnGetQuote","click",()=>{
     const p=getJ(STORAGE.prefs);
     if(!hasCompletedOnboarding(p)){
       show(qs("onboardingScreen"),true);
@@ -260,9 +354,12 @@ let ALL=[], CURRENT=null, LAST_CTX=null;
     }
     const ctx=ctxFromUI();
     if(!ctx.need || !ctx.mood){
-      alert("Choisis un besoin et une humeur.");
+      alert("Choisis d’abord un besoin, puis une humeur.");
       return;
     }
+
+    if(!ensureCitationsReady()) return;
+
     const c=pick(ALL,ctx);
     if(!c){
       alert("Aucune citation trouvée avec ces paramètres.");
@@ -275,7 +372,7 @@ let ALL=[], CURRENT=null, LAST_CTX=null;
   });
 
   // Toggle détails
-  qs("btnToggleDetails").addEventListener("click",()=>{
+  on("btnToggleDetails","click",()=>{
     const box=qs("detailsBox");
     const open=box.style.display!=="none";
     box.style.display=open?"none":"block";
@@ -283,24 +380,26 @@ let ALL=[], CURRENT=null, LAST_CTX=null;
   });
 
   // Feedback
-  qs("btnUp").addEventListener("click",()=>{
+  on("btnUp","click",()=>{
     if(!CURRENT) return;
     feedback(CURRENT,"up");
     alert("👍 Noté.");
   });
 
-  qs("btnMid").addEventListener("click",()=>{
+  on("btnMid","click",()=>{
     if(!CURRENT) return;
     feedback(CURRENT,"mid");
     alert("😐 Noté.");
   });
 
-  qs("btnDown").addEventListener("click",()=>{
+  on("btnDown","click",()=>{
     if(!CURRENT) return;
     feedback(CURRENT,"down");
 
     const wantsAnother=confirm("Ok — tu en veux une autre ?");
     if(!wantsAnother) return;
+
+    if(!ensureCitationsReady()) return;
 
     const ctx=LAST_CTX || ctxFromUI();
     const c=pick(ALL,ctx);
