@@ -9,7 +9,7 @@
     body { margin: 0; background: #0b0c10; color: #eaf0ff; }
     .wrap { max-width: 520px; margin: 0 auto; padding: 16px; }
     .card { background: #11131a; border: 1px solid #1f2433; border-radius: 18px; padding: 16px; }
-    h1 { font-size: 16px; margin: 0; letter-spacing: 0.2px; }
+    h1 { font-size: 16px; margin: 16px 6px 20px 6px; letter-spacing: 0.2px; }
     h2 { font-size: 13px; margin: 16px 0 8px; opacity: 0.9; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 740px){ .row { grid-template-columns: 1fr; } }
@@ -102,7 +102,6 @@
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <h1>Fit du jour</h1>
       </div>
       <button class="small" id="btnOpenSettings" aria-label="Ouvrir les paramètres" title="Paramètres">⚙︎</button>
     </div>
@@ -146,7 +145,7 @@
 
       <!-- Besoin — version rapide -->
       <div class="need-variant" data-variant="quick">
-        <h1 class="muted">Qu'est-ce qui te ferait le plus de bien maintenant ?</h1>
+        <h1>Qu'est-ce qui te ferait le plus de bien maintenant ?</h1>
         <div class="chips" id="need-quick">
           <button class="chip need-chip" data-need="calme">
             <span class="emoji">🌿</span><span class="label">Me calmer</span>
@@ -171,7 +170,7 @@
 
       <!-- Besoin — scénarios -->
       <div class="need-variant" data-variant="scenarios">
-        <h1 style="margin-top:14px;">Dans laquelle de ces situations tu te reconnais le plus ?</h1>
+        <h1>Dans laquelle de ces situations tu te reconnais le plus ?</h1>
         <div class="cards-row" id="need-scenarios">
           <button class="card-btn need-card" data-need="calme">
             <span class="emoji">🕑</span>
@@ -208,7 +207,7 @@
 
       <!-- Besoin — mini-quiz -->
       <div class="need-variant" data-variant="quiz">
-        <h1 class="muted">Si une phrase devait t’aider là, elle ferait quoi ?</h1>
+        <h1>Si une phrase devait t’aider là, elle ferait quoi ?</h1>
         <div class="chips" id="need-quiz">
           <button class="chip need-quiz" data-need="calme">
             <span class="emoji">🧘</span><span class="label">m’apaiserait</span>
@@ -236,7 +235,7 @@
       <div id="moodStep" style="display:none; margin-top:18px;">
       <!-- Humeur — rapide -->
       <div class="mood-variant" data-variant="quick">
-        <h1 class="muted">Comment tu te sens là, tout de suite ?</h1>
+        <h1>Comment tu te sens là, tout de suite ?</h1>
         <div class="chips" id="mood-quick">
           <button class="chip mood-chip" data-mood="bien">
             <span class="emoji">🙂</span><span class="label">Plutôt bien</span>
@@ -261,7 +260,7 @@
 
       <!-- Humeur — météo -->
       <div class="mood-variant" data-variant="weather">
-        <h1 class="muted">Si ton humeur était une météo aujourd’hui, ce serait ?</h1>
+        <h1>Si ton humeur était une météo aujourd’hui, ce serait ?</h1>
         <div class="chips" id="mood-weather">
           <button class="chip mood-weather" data-mood="bien">
             <span class="emoji">🌞</span><span class="label">Clair</span>
@@ -286,7 +285,7 @@
 
       <!-- Humeur — phrase -->
       <div class="mood-variant" data-variant="phrase">
-        <h1 class="muted">Complète la phrase suivante : “En ce moment, je me sens…”</h1>
+        <h1>Complète la phrase suivante : “En ce moment, je me sens…”</h1>
         <div class="chips" id="mood-phrase">
           <button class="chip mood-phrase" data-mood="fatigué">
             <span class="emoji">😴</span><span class="label">épuisé·e</span>
