@@ -7,6 +7,43 @@ function setJ(k,v){localStorage.setItem(k,JSON.stringify(v));}
 function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
 function hourBucket(){const h=new Date().getHours(); if(h<11)return "matin"; if(h<18)return "jour"; return "soir";}
 
+function hasCompletedOnboarding(prefs){
+  return Boolean(prefs && prefs.tonePref && typeof prefs.energyCap==="number");
+}
+
+function qs(id){return document.getElementById(id);}
+
+function show(el,yes){ if(!el) return; el.style.display = yes ? "block" : "none"; }
+
+function openSettings(){
+  qs("settingsOverlay").classList.remove("hidden");
+  qs("settingsPanel").classList.remove("hidden");
+}
+
+function closeSettings(){
+  qs("settingsOverlay").classList.add("hidden");
+  qs("settingsPanel").classList.add("hidden");
+}
+
+function labelTone(t){
+  if(t==="accompagnant") return "Accompagnant";
+  if(t==="neutre") return "Neutre";
+  if(t==="direct") return "Direct";
+  if(t==="stoïque") return "Stoïque";
+  if(t==="poétique") return "Poétique";
+  return "—";
+}
+
+function updateSubtitle(){
+  const p=getJ(STORAGE.prefs);
+  const tone=labelTone(p.tonePref);
+  const energy=typeof p.energyCap==="number" ? p.energyCap : 2;
+  const el=qs("subtitle");
+  if(!el) return;
+  if(hasCompletedOnboarding(p)) el.textContent=`Ton : ${tone} • Énergie max : ${energy}`;
+  else el.textContent="Une citation courte, au bon niveau d’énergie.";
+}
+
 function safetyFilter(c,mood,cap){
   if(c.is_injunctive||c.is_guilt_inducing||c.is_toxic_positive) return false;
   if((mood==="fatigué"||mood==="triste") && c.energy>=3) return false;
@@ -19,12 +56,6 @@ function score(c,ctx,hist){
   if(ctx.mood && c.mood && c.mood===ctx.mood) s+=0.30;
   if(ctx.mood && !c.mood) s+=0.06;
   if(ctx.tonePref && c.tone===ctx.tonePref) s+=0.15;
-
-  if(ctx.dayLoad==="dense"){ if(c.length==="courte") s+=0.06; if(c.length==="longue") s-=0.04; }
-  else if(ctx.dayLoad==="light"){ if(c.length==="moyenne"||c.length==="longue") s+=0.03; }
-
-  if(ctx.weather==="gris"){ if(c.tone==="accompagnant"||c.tone==="poétique") s+=0.04; if(c.tone==="direct") s-=0.02; }
-  else if(ctx.weather==="soleil"){ if(c.tone==="neutre"||c.tone==="direct") s+=0.02; }
 
   const hb=hourBucket();
   if(hb==="soir"){ if(c.energy===1) s+=0.02; if(c.tone==="poétique"||c.tone==="stoïque") s+=0.01; }
@@ -74,39 +105,66 @@ function pick(all,ctx){
 }
 
 function render(c){
-  document.getElementById("quoteBox").style.display="block";
-  document.getElementById("metaBox").style.display="flex";
-  document.getElementById("feedbackRow").style.display="flex";
-  document.getElementById("quoteBox").textContent=c.text;
-  const pills=[`besoin: ${c.need}`, c.mood?`humeur: ${c.mood}`:"humeur: —",`ton: ${c.tone}`,`énergie: ${c.energy}`,`longueur: ${c.length}`,`id: ${c.id}`];
-  document.getElementById("metaBox").innerHTML=pills.map(p=>`<span class="pill">${p}</span>`).join("");
-}
+  qs("quoteBox").style.display="block";
+  qs("feedbackRow").style.display="flex";
+  qs("detailsRow").style.display="flex";
+  qs("quoteBox").textContent=c.text;
 
-function updateToday(){
-  const d=new Date();
-  document.getElementById("today").textContent=d.toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+" — "+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  // Par défaut: pas de metadata visible, uniquement via “Détails”.
+  qs("detailsBox").style.display="none";
+  qs("btnToggleDetails").textContent="Détails";
+
+  // Détails: par défaut cachés, mais mis à jour à chaque citation
+  const prefs=getJ(STORAGE.prefs);
+  const ctx=LAST_CTX || {need:null,mood:null};
+  const userKv=[
+    ["need", ctx.need ?? "—"],
+    ["mood", ctx.mood ?? "—"],
+    ["tonePref", prefs.tonePref || "—"],
+    ["energyCap", String(typeof prefs.energyCap==="number"?prefs.energyCap:2)]
+  ];
+  const quoteKv=[
+    ["id", c.id ?? "—"],
+    ["need", c.need ?? "—"],
+    ["mood", c.mood ?? "—"],
+    ["tone", c.tone ?? "—"],
+    ["energy", String(c.energy ?? "—")],
+    ["length", c.length ?? "—"],
+    ["author", c.author ?? "—"],
+    ["language", c.language ?? "—"],
+    ["is_injunctive", String(Boolean(c.is_injunctive))],
+    ["is_guilt_inducing", String(Boolean(c.is_guilt_inducing))],
+    ["is_toxic_positive", String(Boolean(c.is_toxic_positive))]
+  ];
+  qs("detailsBox").innerHTML=
+    `<h2 style="margin:0 0 8px;">Détails</h2>`+
+    `<div class="muted" style="margin-bottom:10px;">Tes paramètres (ce que tu as choisi) vs la citation (ses champs).</div>`+
+    `<div class="row">`+
+      `<div>`+
+        `<div class="muted" style="margin-bottom:6px;"><b>Tes paramètres</b></div>`+
+        `<div>${userKv.map(([k,v])=>`<span class="pill">${k}: ${v}</span>`).join(" ")}</div>`+
+      `</div>`+
+      `<div>`+
+        `<div class="muted" style="margin-bottom:6px;"><b>Citation</b></div>`+
+        `<div>${quoteKv.map(([k,v])=>`<span class="pill">${k}: ${v}</span>`).join(" ")}</div>`+
+      `</div>`+
+    `</div>`;
 }
 
 function ctxFromUI(){
-  const ctx={
-    need: document.getElementById("need").value||null,
-    mood: document.getElementById("mood").value||null,
-    tonePref: document.getElementById("tonePref").value||null,
-    energyCap: document.getElementById("energyCap").value||"3",
-    dayLoad: document.getElementById("dayLoad").value||null,
-    weather: document.getElementById("weather").value||null
-  };
   const prefs=getJ(STORAGE.prefs);
-  if(ctx.tonePref) prefs.tonePref=ctx.tonePref;
-  prefs.energyCap=parseInt(ctx.energyCap,10);
-  setJ(STORAGE.prefs,prefs);
-  return ctx;
+  return {
+    need: qs("need").value||null,
+    mood: qs("mood").value||null,
+    tonePref: prefs.tonePref||null,
+    energyCap: String(prefs.energyCap||3)
+  };
 }
 
-function syncPrefs(){
+function syncPrefsIntoSettings(){
   const p=getJ(STORAGE.prefs);
-  if(p.tonePref) document.getElementById("tonePref").value=p.tonePref;
-  if(p.energyCap) document.getElementById("energyCap").value=String(p.energyCap);
+  qs("setTone").value=p.tonePref||"";
+  qs("setEnergy").value=String(p.energyCap||2);
 }
 
 function pushSeen(id){
@@ -130,53 +188,129 @@ function feedback(c,kind){
   setJ(STORAGE.history,h);
 }
 
-let ALL=[], CURRENT=null;
+let ALL=[], CURRENT=null, LAST_CTX=null;
 
 (async function init(){
-  updateToday(); setInterval(updateToday,30000);
-  syncPrefs();
+  // Init prefs defaults (sans déclencher l'onboarding comme "fait")
+  const prefs=getJ(STORAGE.prefs);
+  if(typeof prefs.energyCap!=="number") prefs.energyCap=2;
+  if(typeof prefs.tonePref!=="string") prefs.tonePref="";
+  setJ(STORAGE.prefs,prefs);
+  updateSubtitle();
+
   ALL=await loadJSON("citations.json");
 
-  document.getElementById("btnDaily").addEventListener("click",()=>{
-    const ctx=ctxFromUI();
-    const daily=getJ(STORAGE.daily);
-    const hist=getJ(STORAGE.history);
-    const seen=hist.seen||[];
-    const key=todayKey();
-    if(daily.key===key && daily.citationId){
-      const c=ALL.find(x=>x.id===daily.citationId);
-      // Si la citation quotidienne existe et n'a pas été vue, l'afficher
-      if(c && !seen.includes(c.id)){
-        CURRENT=c;
-        render(c);
-        pushSeen(c.id); // L'ajouter à l'historique
-        return;
-      }
+  // UI: onboarding vs main
+  const completed=hasCompletedOnboarding(getJ(STORAGE.prefs));
+  show(qs("onboardingScreen"),!completed);
+  show(qs("mainScreen"),completed);
+  qs("btnOpenSettings").style.visibility = completed ? "visible" : "hidden";
+
+  // Settings open/close
+  qs("btnOpenSettings").addEventListener("click",()=>{
+    syncPrefsIntoSettings();
+    openSettings();
+  });
+  qs("btnCloseSettings").addEventListener("click",closeSettings);
+  qs("settingsOverlay").addEventListener("click",closeSettings);
+
+  // Onboarding
+  qs("btnFinishOnboarding").addEventListener("click",()=>{
+    const tone=qs("obTone").value||"";
+    const energy=parseInt(qs("obEnergy").value||"2",10);
+    if(!tone){
+      alert("Choisis un ton pour continuer.");
+      return;
     }
-    // Sinon, choisir une nouvelle citation
-    const c=pick(ALL,ctx); if(!c) return;
-    CURRENT=c; render(c); pushSeen(c.id);
-    setJ(STORAGE.daily,{key,citationId:c.id,ctx,at:new Date().toISOString()});
+    const p=getJ(STORAGE.prefs);
+    p.tonePref=tone;
+    p.energyCap=clamp(energy,1,3);
+    setJ(STORAGE.prefs,p);
+    updateSubtitle();
+
+    show(qs("onboardingScreen"),false);
+    show(qs("mainScreen"),true);
+    qs("btnOpenSettings").style.visibility="visible";
   });
 
-  document.getElementById("btnNew").addEventListener("click",()=>{
+  // Save settings
+  qs("btnSaveSettings").addEventListener("click",()=>{
+    const tone=qs("setTone").value||"";
+    const energy=parseInt(qs("setEnergy").value||"2",10);
+    if(!tone){
+      alert("Choisis un ton.");
+      return;
+    }
+    const p=getJ(STORAGE.prefs);
+    p.tonePref=tone;
+    p.energyCap=clamp(energy,1,3);
+    setJ(STORAGE.prefs,p);
+    updateSubtitle();
+    closeSettings();
+  });
+
+  // Main flow
+  qs("btnGetQuote").addEventListener("click",()=>{
+    const p=getJ(STORAGE.prefs);
+    if(!hasCompletedOnboarding(p)){
+      show(qs("onboardingScreen"),true);
+      show(qs("mainScreen"),false);
+      qs("btnOpenSettings").style.visibility="hidden";
+      return;
+    }
     const ctx=ctxFromUI();
-    const c=pick(ALL,ctx); if(!c) return;
-    CURRENT=c; render(c); pushSeen(c.id);
+    if(!ctx.need || !ctx.mood){
+      alert("Choisis un besoin et une humeur.");
+      return;
+    }
+    const c=pick(ALL,ctx);
+    if(!c){
+      alert("Aucune citation trouvée avec ces paramètres.");
+      return;
+    }
+    CURRENT=c;
+    LAST_CTX=ctx;
+    render(c);
+    pushSeen(c.id);
   });
 
-  document.getElementById("btnReset").addEventListener("click",()=>{
-    localStorage.removeItem(STORAGE.history);
-    localStorage.removeItem(STORAGE.daily);
-    alert("Réinitialisé.");
+  // Toggle détails
+  qs("btnToggleDetails").addEventListener("click",()=>{
+    const box=qs("detailsBox");
+    const open=box.style.display!=="none";
+    box.style.display=open?"none":"block";
+    qs("btnToggleDetails").textContent=open?"Détails":"Masquer";
   });
 
-  document.getElementById("btnUp").addEventListener("click",()=>{ if(CURRENT){feedback(CURRENT,"up"); alert("👍 Noté.");}});
-  document.getElementById("btnMid").addEventListener("click",()=>{ if(CURRENT){feedback(CURRENT,"mid"); alert("😐 Noté.");}});
-  document.getElementById("btnDown").addEventListener("click",()=>{ if(CURRENT){feedback(CURRENT,"down"); alert("👎 Noté.");}});
-  document.getElementById("btnCopy").addEventListener("click",async()=>{
+  // Feedback
+  qs("btnUp").addEventListener("click",()=>{
     if(!CURRENT) return;
-    await navigator.clipboard.writeText(CURRENT.text);
-    alert("Copié ✅");
+    feedback(CURRENT,"up");
+    alert("👍 Noté.");
+  });
+
+  qs("btnMid").addEventListener("click",()=>{
+    if(!CURRENT) return;
+    feedback(CURRENT,"mid");
+    alert("😐 Noté.");
+  });
+
+  qs("btnDown").addEventListener("click",()=>{
+    if(!CURRENT) return;
+    feedback(CURRENT,"down");
+
+    const wantsAnother=confirm("Ok — tu en veux une autre ?");
+    if(!wantsAnother) return;
+
+    const ctx=LAST_CTX || ctxFromUI();
+    const c=pick(ALL,ctx);
+    if(!c){
+      alert("Je n’ai pas trouvé d’autre citation adaptée.");
+      return;
+    }
+    CURRENT=c;
+    LAST_CTX=ctx;
+    render(c);
+    pushSeen(c.id);
   });
 })();

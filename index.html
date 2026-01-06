@@ -7,10 +7,10 @@
   <style>
     :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
     body { margin: 0; background: #0b0c10; color: #eaf0ff; }
-    .wrap { max-width: 900px; margin: 0 auto; padding: 20px; }
-    .card { background: #11131a; border: 1px solid #1f2433; border-radius: 16px; padding: 18px; }
-    h1 { font-size: 18px; margin: 0 0 10px; }
-    h2 { font-size: 14px; margin: 18px 0 8px; opacity: 0.9; }
+    .wrap { max-width: 520px; margin: 0 auto; padding: 16px; }
+    .card { background: #11131a; border: 1px solid #1f2433; border-radius: 18px; padding: 16px; }
+    h1 { font-size: 16px; margin: 0; letter-spacing: 0.2px; }
+    h2 { font-size: 13px; margin: 16px 0 8px; opacity: 0.9; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 740px){ .row { grid-template-columns: 1fr; } }
     label { display: block; font-size: 13px; margin-bottom: 6px; opacity: 0.9; }
@@ -19,6 +19,7 @@
       border: 1px solid #2a3145; background: #0c0e14; color: #eaf0ff;
       outline: none;
     }
+    select:focus { border-color: #3a4663; }
     .muted { font-size: 12px; opacity: 0.75; line-height: 1.4; }
     .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
     button {
@@ -26,6 +27,9 @@
       padding: 10px 12px; border-radius: 12px; cursor: pointer;
     }
     button.primary { background: #1b3cff; border-color: #1b3cff; }
+    button.small { padding: 8px 10px; border-radius: 999px; font-size: 12px; }
+    button.link { background: transparent; border-color: transparent; opacity: 0.9; }
+    button.link:hover { opacity: 1; }
     .quote {
       font-size: 22px; line-height: 1.45; padding: 18px 14px; margin-top: 14px;
       border-radius: 16px; border: 1px dashed #2a3145; background: #0c0e14;
@@ -36,19 +40,73 @@
     .small { font-size: 12px; opacity: 0.8; }
     .right { text-align: right; }
     .grid2 { display:grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .brand { display: flex; flex-direction: column; gap: 2px; }
+    .brand .sub { font-size: 12px; opacity: 0.75; }
+
+    .panel {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: #11131a; border-top: 1px solid #1f2433;
+      border-radius: 18px 18px 0 0;
+      padding: 14px 16px;
+      max-width: 520px;
+      margin: 0 auto;
+      box-shadow: 0 -12px 40px rgba(0,0,0,0.35);
+    }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="grid2">
-      <h1>📌 MVP Citations — Fit du jour</h1>
-      <div class="small" id="today"></div>
+    <div class="topbar">
+      <div class="brand">
+        <h1>Fit du jour</h1>
+      </div>
+      <button class="small" id="btnOpenSettings" aria-label="Ouvrir les paramètres" title="Paramètres">⚙︎</button>
     </div>
 
-    <div class="card">
+    <!-- Onboarding (1ère visite) -->
+    <div class="card" id="onboardingScreen" style="display:none;">
+      <h2>Choisis ton style</h2>
+      <div class="muted">On s’en sert pour te proposer des citations qui te conviennent. Tu pourras modifier plus tard dans les paramètres.</div>
+
+      <div class="row" style="margin-top:12px;">
+        <div>
+          <label for="obTone">Ton préféré</label>
+          <select id="obTone">
+            <option value="">—</option>
+            <option value="accompagnant">Accompagnant (doux)</option>
+            <option value="neutre">Neutre (simple)</option>
+            <option value="direct">Direct (franc)</option>
+            <option value="stoïque">Stoïque (posé)</option>
+            <option value="poétique">Poétique (imagé)</option>
+          </select>
+          <div class="muted">Le “ton” = la manière dont la phrase te parle.</div>
+        </div>
+        <div>
+          <label for="obEnergy">Énergie max</label>
+          <select id="obEnergy">
+            <option value="1">1 (très doux)</option>
+            <option value="2" selected>2 (équilibré)</option>
+            <option value="3">3 (tout)</option>
+          </select>
+          <div class="muted">C’est un <b>garde-fou</b> : si ton énergie max est 1, on évite les citations “coup de boost”. Si elle est 3, tout est possible.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="btnFinishOnboarding">Continuer</button>
+      </div>
+    </div>
+
+    <!-- Flow principal (si onboarding déjà fait) -->
+    <div class="card" id="mainScreen" style="display:none;">
+      <h2>1) Dis-moi ton besoin</h2>
       <div class="row">
         <div>
-          <label for="need">Besoin (prioritaire)</label>
+          <label for="need">Besoin</label>
           <select id="need">
             <option value="">—</option>
             <option value="calme">Calme</option>
@@ -58,11 +116,9 @@
             <option value="lâcher-prise">Lâcher-prise</option>
             <option value="perspective">Perspective</option>
           </select>
-          <div class="muted">Si tu choisis un besoin, il <b>écrase</b> le reste.</div>
         </div>
-
         <div>
-          <label for="mood">Humeur (secondaire)</label>
+          <label for="mood">Humeur</label>
           <select id="mood">
             <option value="">—</option>
             <option value="bien">Bien</option>
@@ -72,78 +128,64 @@
             <option value="triste">Triste</option>
             <option value="motivé">Motivé</option>
           </select>
-          <div class="muted">Optionnel. Sert à affiner, jamais à décider seule.</div>
-        </div>
-      </div>
-
-      <h2>Préférences</h2>
-      <div class="row">
-        <div>
-          <label for="tonePref">Ton préféré</label>
-          <select id="tonePref">
-            <option value="">—</option>
-            <option value="accompagnant">Accompagnant</option>
-            <option value="neutre">Neutre</option>
-            <option value="direct">Direct</option>
-            <option value="stoïque">Stoïque</option>
-            <option value="poétique">Poétique</option>
-          </select>
-        </div>
-        <div>
-          <label for="energyCap">Énergie max (garde-fou)</label>
-          <select id="energyCap">
-            <option value="3">3 (tout)</option>
-            <option value="2">2 (éviter trop intense)</option>
-            <option value="1">1 (très doux)</option>
-          </select>
-        </div>
-      </div>
-
-      <h2>Contexte (externes)</h2>
-      <div class="row">
-        <div>
-          <label for="dayLoad">Charge du jour (calendrier)</label>
-          <select id="dayLoad">
-            <option value="">—</option>
-            <option value="dense">Journée dense</option>
-            <option value="moyenne">Moyenne</option>
-            <option value="light">Plutôt légère</option>
-          </select>
-        </div>
-        <div>
-          <label for="weather">Météo / ambiance</label>
-          <select id="weather">
-            <option value="">—</option>
-            <option value="gris">Gris / Pluie</option>
-            <option value="neutre">Neutre</option>
-            <option value="soleil">Soleil</option>
-          </select>
         </div>
       </div>
 
       <div class="actions">
-        <button class="primary" id="btnDaily">Proposer la citation du jour</button>
-        <button id="btnNew">Une autre</button>
-        <button id="btnReset">Réinitialiser</button>
+        <button class="primary" id="btnGetQuote">Voir ma citation</button>
       </div>
 
       <div id="quoteBox" class="quote" style="display:none;"></div>
-      <div id="metaBox" class="meta" style="display:none;"></div>
+      <div class="actions" id="detailsRow" style="display:none;">
+        <button class="small" id="btnToggleDetails">Détails</button>
+      </div>
+      <div id="detailsBox" class="card" style="display:none; margin-top:10px;"></div>
 
       <div class="actions" id="feedbackRow" style="display:none;">
         <button id="btnUp">👍 Ça m’a parlé</button>
         <button id="btnMid">😐 OK</button>
         <button id="btnDown">👎 Pas du tout</button>
-        <button id="btnCopy">Copier</button>
       </div>
-
       <div class="hr"></div>
-      <div class="muted">
-        <b>Règles :</b> Besoin/Humeur déclarés &gt; externes. Externes ajustent la forme (ton/longueur) et le timing. Historique + feedback pour affiner.
-      </div>
-      <div class="small right">Set : 72 citations FR taguées.</div>
+      <div class="small right" id="tinyFoot">Set : 72 citations FR taguées.</div>
     </div>
   </div>
+
+  <!-- Paramètres -->
+  <div id="settingsOverlay" class="overlay hidden"></div>
+  <div id="settingsPanel" class="panel hidden" role="dialog" aria-modal="true" aria-label="Paramètres">
+    <div class="grid2">
+      <h2 style="margin:0;">Paramètres</h2>
+      <button class="small link" id="btnCloseSettings">Fermer</button>
+    </div>
+    <div class="muted" style="margin-top:8px;">Ici, tu peux modifier ton ton préféré et ton énergie max.</div>
+    <div class="row" style="margin-top:12px;">
+      <div>
+        <label for="setTone">Ton préféré</label>
+        <select id="setTone">
+          <option value="">—</option>
+          <option value="accompagnant">Accompagnant (doux)</option>
+          <option value="neutre">Neutre (simple)</option>
+          <option value="direct">Direct (franc)</option>
+          <option value="stoïque">Stoïque (posé)</option>
+          <option value="poétique">Poétique (imagé)</option>
+        </select>
+      </div>
+      <div>
+        <label for="setEnergy">Énergie max</label>
+        <select id="setEnergy">
+          <option value="1">1 (très doux)</option>
+          <option value="2">2 (équilibré)</option>
+          <option value="3">3 (tout)</option>
+        </select>
+        <div class="muted">Garde-fou : limite l’intensité des citations. 1 = très soft, 2 = modéré, 3 = sans limite.</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="primary" id="btnSaveSettings">Enregistrer</button>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
