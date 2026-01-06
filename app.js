@@ -50,12 +50,19 @@ function updateSubtitle(){
   else el.textContent="Une citation courte, au bon niveau d’énergie.";
 }
 
+function setQuestionFlowVisible(yes){
+  const el = qs("questionFlow");
+  if(!el) return;
+  el.classList.toggle("hidden", !yes);
+}
+
 function resetQuoteUI(){
   if(qs("quoteBox")) qs("quoteBox").style.display="none";
   if(qs("feedbackRow")) qs("feedbackRow").style.display="none";
   if(qs("detailsRow")) qs("detailsRow").style.display="none";
   if(qs("detailsBox")) qs("detailsBox").style.display="none";
   if(qs("btnToggleDetails")) qs("btnToggleDetails").textContent="Détails";
+  setQuestionFlowVisible(true);
 }
 
 function safetyFilter(c,mood,cap){
@@ -119,6 +126,7 @@ function pick(all,ctx){
 }
 
 function render(c){
+  setQuestionFlowVisible(false);
   qs("quoteBox").style.display="block";
   qs("feedbackRow").style.display="flex";
   qs("detailsRow").style.display="flex";
@@ -265,6 +273,7 @@ function ensureCitationsReady(){
   resetQuoteUI();
   if(qs("moodStep")) qs("moodStep").style.display="none";
   if(qs("quoteActionRow")) qs("quoteActionRow").style.display="none";
+  setQuestionFlowVisible(true);
 
   // Settings open/close
   on("btnOpenSettings","click",()=>{
