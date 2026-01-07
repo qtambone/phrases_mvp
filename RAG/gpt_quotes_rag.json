@@ -1,0 +1,1151 @@
+{
+  "metadata": {
+    "source": "GPT",
+    "endpoint": "",
+    "total_quotes": 500,
+    "language": "fr",
+    "extraction_date": "2026-01-07 10:48:48"
+  },
+  "quotes": [
+    {
+      "id": "QK-fr-0001",
+      "text": "Si Dieu n'existait pas, il faudrait l'inventer.",
+      "author": "Voltaire",
+      "year": "1761",
+      "source": "Lettre à l'abbé Trublet",
+      "context": "Extrait d'une lettre de Voltaire, exprimant ironiquement la nécessité d'un Dieu pour établir la morale.",
+      "tags": [
+        "religion",
+        "philosophy"
+      ]
+    },
+    {
+      "id": "QK-fr-0002",
+      "text": "Le mieux est l'ennemi du bien.",
+      "author": "Voltaire",
+      "year": "1764",
+      "source": "Dictionnaire philosophique",
+      "context": "Maxime illustrant que la quête de la perfection peut empêcher d'apprécier ce qui est suffisamment bon.",
+      "tags": [
+        "philosophy",
+        "morality"
+      ]
+    },
+    {
+      "id": "QK-fr-0003",
+      "text": "Il faut cultiver notre jardin.",
+      "author": "Voltaire",
+      "year": "1759",
+      "source": "Candide",
+      "context": "Conclusion du conte philosophique *Candide*, suggérant de se consacrer à des tâches modestes mais concrètes.",
+      "tags": [
+        "literature",
+        "philosophy"
+      ]
+    },
+    {
+      "id": "QK-fr-0004",
+      "text": "Tout est pour le mieux dans le meilleur des mondes possibles.",
+      "author": "Voltaire",
+      "year": "1759",
+      "source": "Candide (propos de Pangloss)",
+      "context": "Réplique du personnage Pangloss exprimant l'optimisme ironique face aux malheurs, dans *Candide*.",
+      "tags": [
+        "literature",
+        "irony"
+      ]
+    },
+    {
+      "id": "QK-fr-0005",
+      "text": "Le secret d'ennuyer est de tout dire.",
+      "author": "Voltaire",
+      "year": "1737",
+      "source": "Œuvres diverses",
+      "context": "Maxime voltairienne soulignant l'art de la concision pour ne pas lasser son audience.",
+      "tags": [
+        "wit",
+        "communication"
+      ]
+    },
+    {
+      "id": "QK-fr-0006",
+      "text": "Plus les hommes seront éclairés, plus ils seront libres.",
+      "author": "Voltaire",
+      "year": "1756",
+      "source": "Essai sur les mœurs",
+      "context": "Réflexion philosophique sur le lien entre l'éducation (lumières) et la liberté des peuples.",
+      "tags": [
+        "philosophy",
+        "freedom"
+      ]
+    },
+    {
+      "id": "QK-fr-0007",
+      "text": "Le cœur a ses raisons que la raison ne connaît point.",
+      "author": "Blaise Pascal",
+      "year": "1670",
+      "source": "Pensées (Fragment 277)",
+      "context": "Pensée célèbre de Pascal expliquant que les sentiments obéissent à une logique interne incompréhensible par la raison pure.",
+      "tags": [
+        "philosophy",
+        "emotion"
+      ]
+    },
+    {
+      "id": "QK-fr-0008",
+      "text": "L'homme n'est qu'un roseau, le plus faible de la nature, mais c'est un roseau pensant.",
+      "author": "Blaise Pascal",
+      "year": "1670",
+      "source": "Pensées (Fragment 347)",
+      "context": "Réflexion de Pascal illustrant la fragilité de l'homme compensée par sa capacité de penser.",
+      "tags": [
+        "philosophy",
+        "humanity"
+      ]
+    },
+    {
+      "id": "QK-fr-0009",
+      "text": "Je pense, donc je suis.",
+      "author": "René Descartes",
+      "year": "1637",
+      "source": "Discours de la méthode",
+      "context": "Énoncé fondamental de Descartes affirmant que la pensée prouve l'existence du sujet pensant (cogito).",
+      "tags": [
+        "philosophy",
+        "metaphysics"
+      ]
+    },
+    {
+      "id": "QK-fr-0010",
+      "text": "L'homme est né libre, et partout il est dans les fers.",
+      "author": "Jean-Jacques Rousseau",
+      "year": "1762",
+      "source": "Du contrat social",
+      "context": "Phrase d'ouverture de *Du contrat social* soulignant la contradiction entre la liberté naturelle de l'homme et son asservissement social.",
+      "tags": [
+        "politics",
+        "society"
+      ]
+    },
+    {
+      "id": "QK-fr-0011",
+      "text": "Tout est bien sortant des mains de l'Auteur des choses; tout dégénère entre les mains de l’homme.",
+      "author": "Jean-Jacques Rousseau",
+      "year": "1762",
+      "source": "Émile ou De l’éducation",
+      "context": "Proposition initiale de *Émile* soulignant la corruption de la pureté naturelle par la société humaine.",
+      "tags": [
+        "philosophy",
+        "nature"
+      ]
+    },
+    {
+      "id": "QK-fr-0012",
+      "text": "Pour réussir dans le monde, il faut avoir l'air fou et être sage.",
+      "author": "Montesquieu",
+      "year": "1755",
+      "source": "Mes pensées",
+      "context": "Aphorisme de Montesquieu sur l'artifice nécessaire pour s'adapter au monde social.",
+      "tags": [
+        "wisdom",
+        "society"
+      ]
+    },
+    {
+      "id": "QK-fr-0013",
+      "text": "Les lois inutiles affaiblissent les lois nécessaires.",
+      "author": "Montesquieu",
+      "year": "1748",
+      "source": "De l'esprit des lois",
+      "context": "Principe juridique énoncé par Montesquieu rappelant qu'une prolifération de lois peut nuire à leur respect.",
+      "tags": [
+        "law",
+        "politics"
+      ]
+    },
+    {
+      "id": "QK-fr-0014",
+      "text": "Il n'y a point de plus cruelle tyrannie que celle que l'on exerce à l'ombre des lois et avec les couleurs de la justice.",
+      "author": "Montesquieu",
+      "year": "1748",
+      "source": "De l'esprit des lois",
+      "context": "Montesquieu dénonce la tyrannie dissimulée sous le couvert de la loi et de la justice apparente.",
+      "tags": [
+        "politics",
+        "justice"
+      ]
+    },
+    {
+      "id": "QK-fr-0015",
+      "text": "Le hasard est un mot vide de sens, rien ne peut exister sans cause.",
+      "author": "Denis Diderot",
+      "year": "1773",
+      "source": "Lettre à l'abbé Barthélemy",
+      "context": "Assertion de Diderot rejetant l'idée du hasard pur en affirmant le principe de causalité universelle.",
+      "tags": [
+        "philosophy",
+        "science"
+      ]
+    },
+    {
+      "id": "QK-fr-0016",
+      "text": "L'homme ne sera libre que lorsque le dernier roi sera pendu avec les boyaux du dernier prêtre.",
+      "author": "Denis Diderot",
+      "year": "1772",
+      "source": "Entretien d'un philosophe avec la maréchale",
+      "context": "Phrase anticléricale et antimonarchique attribuée à Diderot, exprimant une provocation révolutionnaire (contexte philosophique des Lumières).",
+      "tags": [
+        "religion",
+        "politics"
+      ]
+    },
+    {
+      "id": "QK-fr-0017",
+      "text": "Dieu se rit des hommes qui déplorent les effets dont ils chérissent les causes.",
+      "author": "Jacques-Bénigne Bossuet",
+      "year": "1688",
+      "source": "Sermons",
+      "context": "Maxime de Bossuet soulignant l'hypocrisie de ceux qui se plaignent de conséquences dont ils cultivent les origines.",
+      "tags": [
+        "religion",
+        "morality"
+      ]
+    },
+    {
+      "id": "QK-fr-0018",
+      "text": "La plus belle des ruses du diable est de vous persuader qu’il n’existe pas.",
+      "author": "Charles Baudelaire",
+      "year": "1869",
+      "source": "Le Spleen de Paris",
+      "context": "Réflexion de Baudelaire sur le mal, suggérant que le diable triomphe en faisant croire à son absence.",
+      "tags": [
+        "literature",
+        "religion"
+      ]
+    },
+    {
+      "id": "QK-fr-0019",
+      "text": "Dieu est le seul être qui, pour régner, n'ait même pas besoin d'exister.",
+      "author": "Charles Baudelaire",
+      "year": "1864",
+      "source": "Journaux intimes",
+      "context": "Provocation de Baudelaire illustrant le pouvoir de l'idée de Dieu indépendamment de la réalité de son existence.",
+      "tags": [
+        "religion",
+        "irony"
+      ]
+    },
+    {
+      "id": "QK-fr-0020",
+      "text": "Je est un autre.",
+      "author": "Arthur Rimbaud",
+      "year": "1871",
+      "source": "Lettre à Paul Demeny",
+      "context": "Proclamation célèbre de Rimbaud dans une lettre, exprimant une conception déstabilisée de l’identité du poète.",
+      "tags": [
+        "literature",
+        "identity"
+      ]
+    },
+    {
+      "id": "QK-fr-0021",
+      "text": "Il faut être absolument moderne.",
+      "author": "Arthur Rimbaud",
+      "year": "1873",
+      "source": "Une saison en enfer",
+      "context": "Exhortation tirée de *Une saison en enfer* où Rimbaud invite à un renouveau total, à vivre sans attaches au passé.",
+      "tags": [
+        "literature",
+        "modernity"
+      ]
+    },
+    {
+      "id": "QK-fr-0022",
+      "text": "On résiste à l'invasion des armées; on ne résiste pas à l'invasion des idées.",
+      "author": "Victor Hugo",
+      "year": "1877",
+      "source": "Histoire d'un crime",
+      "context": "Réflexion de Hugo signifiant que les nouvelles idées triomphent inévitablement, plus encore que la force militaire.",
+      "tags": [
+        "politics",
+        "philosophy"
+      ]
+    },
+    {
+      "id": "QK-fr-0023",
+      "text": "Ceux qui vivent, ce sont ceux qui luttent.",
+      "author": "Victor Hugo",
+      "year": "1853",
+      "source": "Les Châtiments",
+      "context": "Vers de Hugo soulignant que la vie véritable réside dans le combat et l'engagement.",
+      "tags": [
+        "poetry",
+        "struggle"
+      ]
+    },
+    {
+      "id": "QK-fr-0024",
+      "text": "La liberté commence où l’ignorance finit.",
+      "author": "Victor Hugo",
+      "year": "1848",
+      "source": "Discours à l’Assemblée constituante",
+      "context": "Déclaration de Hugo en 1848, indiquant que l’instruction du peuple est une condition nécessaire à sa liberté.",
+      "tags": [
+        "freedom",
+        "education"
+      ]
+    },
+    {
+      "id": "QK-fr-0025",
+      "text": "La peine de mort est le signe spécial et éternel de la barbarie.",
+      "author": "Victor Hugo",
+      "year": "1829",
+      "source": "Le Dernier Jour d'un condamné",
+      "context": "Conviction humaniste de Hugo exprimée dans son roman contre la peine capitale.",
+      "tags": [
+        "justice",
+        "society"
+      ]
+    },
+    {
+      "id": "QK-fr-0026",
+      "text": "Une guerre entre Européens est une guerre civile.",
+      "author": "Victor Hugo",
+      "year": "1849",
+      "source": "Discours au Congrès de la Paix",
+      "context": "Proclamation de Hugo lors du Congrès de la Paix, appelant de ses vœux une Europe unie et pacifique.",
+      "tags": [
+        "politics",
+        "peace"
+      ]
+    },
+    {
+      "id": "QK-fr-0027",
+      "text": "La mélancolie, c'est le bonheur d'être triste.",
+      "author": "Victor Hugo",
+      "year": "1862",
+      "source": "Les Misérables",
+      "context": "Définition poétique de la mélancolie donnée par Hugo dans *Les Misérables*, illustrant la douceur de la tristesse contemplative.",
+      "tags": [
+        "literature",
+        "paradox"
+      ]
+    },
+    {
+      "id": "QK-fr-0028",
+      "text": "La vie est une fleur. L'amour en est le miel.",
+      "author": "Victor Hugo",
+      "year": "1856",
+      "source": "Les Contemplations",
+      "context": "Métaphore de Hugo comparant la vie à une fleur et l'amour à son nectar, extraite de ses poèmes.",
+      "tags": [
+        "poetry",
+        "love"
+      ]
+    },
+    {
+      "id": "QK-fr-0029",
+      "text": "J'accuse...!",
+      "author": "Émile Zola",
+      "year": "1898",
+      "source": "Lettre « J'accuse...! » au Président de la République",
+      "context": "Titre de la célèbre lettre ouverte de Zola dénonçant l'injustice de l'Affaire Dreyfus, publié dans L'Aurore.",
+      "tags": [
+        "justice",
+        "politics"
+      ]
+    },
+    {
+      "id": "QK-fr-0030",
+      "text": "La vérité est en marche et rien ne l'arrêtera.",
+      "author": "Émile Zola",
+      "year": "1898",
+      "source": "Lettre « J'accuse...! »",
+      "context": "Phrase de la lettre *J'accuse...!* de Zola proclamant que la vérité finit toujours par triompher malgré les obstacles.",
+      "tags": [
+        "justice",
+        "truth"
+      ]
+    },
+    {
+      "id": "QK-fr-0031",
+      "text": "Il n'y a qu'un problème philosophique vraiment sérieux : c'est le suicide.",
+      "author": "Albert Camus",
+      "year": "1942",
+      "source": "Le Mythe de Sisyphe",
+      "context": "Ouverture de l'essai *Le Mythe de Sisyphe* de Camus, posant la question du sens de la vie face à l'absurde.",
+      "tags": [
+        "philosophy",
+        "existentialism"
+      ]
+    },
+    {
+      "id": "QK-fr-0032",
+      "text": "Au milieu de l'hiver, j'ai découvert en moi un invincible été.",
+      "author": "Albert Camus",
+      "year": "1952",
+      "source": "Retour à Tipasa",
+      "context": "Citation tirée d’un essai de Camus, exprimant la résilience et l'espoir qui persistent malgré l’adversité.",
+      "tags": [
+        "literature",
+        "hope"
+      ]
+    },
+    {
+      "id": "QK-fr-0033",
+      "text": "Je me révolte, donc nous sommes.",
+      "author": "Albert Camus",
+      "year": "1951",
+      "source": "L'Homme révolté",
+      "context": "Formule paradoxale de Camus soulignant que la révolte de l'individu confirme et fonde la solidarité humaine.",
+      "tags": [
+        "philosophy",
+        "rebellion"
+      ]
+    },
+    {
+      "id": "QK-fr-0034",
+      "text": "Il faut imaginer Sisyphe heureux.",
+      "author": "Albert Camus",
+      "year": "1942",
+      "source": "Le Mythe de Sisyphe",
+      "context": "Conclusion de *Le Mythe de Sisyphe* où Camus propose de trouver le bonheur même dans l'absurde de la condition humaine.",
+      "tags": [
+        "philosophy",
+        "absurdism"
+      ]
+    },
+    {
+      "id": "QK-fr-0035",
+      "text": "L'enfer, c'est les autres.",
+      "author": "Jean-Paul Sartre",
+      "year": "1944",
+      "source": "Huis clos",
+      "context": "Réplique célèbre de la pièce *Huis clos* résumant la pensée sartrienne selon laquelle le regard d'autrui peut être aliénant.",
+      "tags": [
+        "philosophy",
+        "existentialism"
+      ]
+    },
+    {
+      "id": "QK-fr-0036",
+      "text": "L'existence précède l'essence.",
+      "author": "Jean-Paul Sartre",
+      "year": "1946",
+      "source": "L'Existentialisme est un humanisme",
+      "context": "Principe fondamental de l'existentialisme sartrien exposé dans cette conférence, affirmant que l'homme se définit par ses actes.",
+      "tags": [
+        "philosophy",
+        "existentialism"
+      ]
+    },
+    {
+      "id": "QK-fr-0037",
+      "text": "L'homme est condamné à être libre.",
+      "author": "Jean-Paul Sartre",
+      "year": "1943",
+      "source": "L'Être et le Néant",
+      "context": "Maxime de Sartre signifiant que l’être humain, dépourvu de nature prédéfinie, porte seul la responsabilité de ses choix.",
+      "tags": [
+        "philosophy",
+        "freedom"
+      ]
+    },
+    {
+      "id": "QK-fr-0038",
+      "text": "On ne naît pas femme, on le devient.",
+      "author": "Simone de Beauvoir",
+      "year": "1949",
+      "source": "Le Deuxième Sexe",
+      "context": "Énoncé fondateur du féminisme moderne par Beauvoir, indiquant que la condition féminine est construite par la société plus que déterminée biologiquement.",
+      "tags": [
+        "feminism",
+        "philosophy"
+      ]
+    },
+    {
+      "id": "QK-fr-0039",
+      "text": "On ne voit bien qu'avec le cœur. L'essentiel est invisible pour les yeux.",
+      "author": "Antoine de Saint-Exupéry",
+      "year": "1943",
+      "source": "Le Petit Prince",
+      "context": "Le renard explique au Petit Prince que la vraie valeur des choses ne se voit qu'avec le cœur, message central du conte poétique.",
+      "tags": [
+        "literature",
+        "wisdom"
+      ]
+    },
+    {
+      "id": "QK-fr-0040",
+      "text": "Le langage est source de malentendus.",
+      "author": "Antoine de Saint-Exupéry",
+      "year": "1943",
+      "source": "Le Petit Prince",
+      "context": "Réflexion du renard au Petit Prince soulignant que les mots peuvent prêter à confusion et nuire à la compréhension mutuelle.",
+      "tags": [
+        "literature",
+        "communication"
+      ]
+    },
+    {
+      "id": "QK-fr-0041",
+      "text": "Tu deviens responsable pour toujours de ce que tu as apprivoisé.",
+      "author": "Antoine de Saint-Exupéry",
+      "year": "1943",
+      "source": "Le Petit Prince",
+      "context": "Le renard enseigne au Petit Prince la responsabilité qui découle des liens créés avec autrui.",
+      "tags": [
+        "literature",
+        "friendship"
+      ]
+    },
+    {
+      "id": "QK-fr-0042",
+      "text": "Toutes les grandes personnes ont d'abord été des enfants, mais peu d'entre elles s'en souviennent.",
+      "author": "Antoine de Saint-Exupéry",
+      "year": "1943",
+      "source": "Le Petit Prince",
+      "context": "Phrase liminaire du *Petit Prince* rappelant que chaque adulte a été un enfant, bien que la plupart l'oublient en grandissant.",
+      "tags": [
+        "literature",
+        "childhood"
+      ]
+    },
+    {
+      "id": "QK-fr-0043",
+      "text": "La perfection est atteinte non quand il ne reste rien à ajouter, mais quand il ne reste rien à enlever.",
+      "author": "Antoine de Saint-Exupéry",
+      "year": "1939",
+      "source": "Terre des hommes",
+      "context": "Réflexion de Saint-Exupéry sur l’essentiel, souvent appliquée au domaine de la conception et de l'ingénierie.",
+      "tags": [
+        "literature",
+        "wisdom"
+      ]
+    },
+    {
+      "id": "QK-fr-0044",
+      "text": "L'avenir, tu n'as pas à le prévoir mais à le permettre.",
+      "author": "Antoine de Saint-Exupéry",
+      "year": "1948",
+      "source": "Citadelle",
+      "context": "Conseil de Saint-Exupéry qui invite à agir dans le présent pour façonner l'avenir plutôt qu'à chercher à le prédire.",
+      "tags": [
+        "wisdom",
+        "future"
+      ]
+    },
+    {
+      "id": "QK-fr-0045",
+      "text": "Le véritable voyage de découverte ne consiste pas à chercher de nouveaux paysages, mais à avoir de nouveaux yeux.",
+      "author": "Marcel Proust",
+      "year": "1927",
+      "source": "Le Temps retrouvé",
+      "context": "Extrait de *À la recherche du temps perdu* de Proust, indiquant que le changement de perspective compte plus que le changement de lieu.",
+      "tags": [
+        "literature",
+        "perspective"
+      ]
+    },
+    {
+      "id": "QK-fr-0046",
+      "text": "Tout le monde se plaint de sa mémoire, personne ne se plaint de son jugement.",
+      "author": "François de La Rochefoucauld",
+      "year": "1665",
+      "source": "Maximes",
+      "context": "Maxime de La Rochefoucauld soulignant l’aveuglement des gens quant à leurs propres erreurs de jugement.",
+      "tags": [
+        "morality",
+        "wit"
+      ]
+    },
+    {
+      "id": "QK-fr-0047",
+      "text": "L'hypocrisie est un hommage que le vice rend à la vertu.",
+      "author": "François de La Rochefoucauld",
+      "year": "1665",
+      "source": "Maximes",
+      "context": "Maxime célèbre de La Rochefoucauld signifiant que le fait de feindre la vertu prouve que la vertu est reconnue comme une valeur.",
+      "tags": [
+        "morality",
+        "hypocrisy"
+      ]
+    },
+    {
+      "id": "QK-fr-0048",
+      "text": "Il y a des gens qui n'auraient jamais été amoureux s'ils n'avaient entendu parler de l'amour.",
+      "author": "François de La Rochefoucauld",
+      "year": "1665",
+      "source": "Maximes",
+      "context": "Maxime ironique de La Rochefoucauld suggérant que l'amour est souvent imité par conformisme plutôt que ressenti authentiquement.",
+      "tags": [
+        "love",
+        "psychology"
+      ]
+    },
+    {
+      "id": "QK-fr-0049",
+      "text": "Nous avons tous assez de force pour supporter les maux d'autrui.",
+      "author": "François de La Rochefoucauld",
+      "year": "1665",
+      "source": "Maximes",
+      "context": "Maxime satirique de La Rochefoucauld pointant qu'il est aisé de supporter les problèmes qui ne nous affectent pas directement.",
+      "tags": [
+        "empathy",
+        "irony"
+      ]
+    },
+    {
+      "id": "QK-fr-0050",
+      "text": "La parfaite valeur est de faire sans témoins ce qu'on serait capable de faire devant tout le monde.",
+      "author": "François de La Rochefoucauld",
+      "year": "1678",
+      "source": "Maximes",
+      "context": "Maxime définissant la véritable vertu comme un courage ou une droiture qui s'exerce même sans regard extérieur.",
+      "tags": [
+        "virtue",
+        "morality"
+      ]
+    },
+    {
+      "id": "QK-fr-0051",
+      "text": "Les enfants n'ont ni passé ni d'avenir, et, ce qui ne nous arrive guère, ils jouissent du présent.",
+      "author": "Jean de La Bruyère",
+      "year": "1688",
+      "source": "Les Caractères",
+      "context": "Observation de La Bruyère sur la manière dont les enfants vivent pleinement dans l'instant présent, sans souci du temps.",
+      "tags": [
+        "society",
+        "childhood"
+      ]
+    },
+    {
+      "id": "QK-fr-0052",
+      "text": "Qu'importe le flacon, pourvu qu'on ait l'ivresse.",
+      "author": "Alfred de Musset",
+      "year": "1832",
+      "source": "La Coupe et les lèvres",
+      "context": "Vers de Musset signifiant que seule compte l'ivresse (le plaisir, l'émotion), non le moyen par lequel on y parvient.",
+      "tags": [
+        "literature",
+        "pleasure"
+      ]
+    },
+    {
+      "id": "QK-fr-0053",
+      "text": "Les plus désespérés sont les chants les plus beaux.",
+      "author": "Alfred de Musset",
+      "year": "1835",
+      "source": "La Nuit de mai",
+      "context": "Vers de Musset où la Muse explique que la plus belle poésie naît de la souffrance profonde.",
+      "tags": [
+        "poetry",
+        "sorrow"
+      ]
+    },
+    {
+      "id": "QK-fr-0054",
+      "text": "L'homme est un apprenti, la douleur est son maître.",
+      "author": "Alfred de Musset",
+      "year": "1837",
+      "source": "La Nuit d'octobre",
+      "context": "Vers de Musset suggérant que la souffrance est formatrice et enseigne à l'homme les leçons de la vie.",
+      "tags": [
+        "poetry",
+        "wisdom"
+      ]
+    },
+    {
+      "id": "QK-fr-0055",
+      "text": "À vaincre sans péril, on triomphe sans gloire.",
+      "author": "Pierre Corneille",
+      "year": "1636",
+      "source": "Le Cid",
+      "context": "Vers fameux du *Cid* illustrant que seul un danger surmonté donne de la gloire à la victoire.",
+      "tags": [
+        "literature",
+        "honor"
+      ]
+    },
+    {
+      "id": "QK-fr-0056",
+      "text": "Cachez ce sein que je ne saurais voir.",
+      "author": "Molière",
+      "year": "1664",
+      "source": "Tartuffe, acte III, sc. 2",
+      "context": "Réplique emblématique de Tartuffe, puritain scandalisé par un léger décolleté, illustrant sa fausse pudeur.",
+      "tags": [
+        "theater",
+        "hypocrisy"
+      ]
+    },
+    {
+      "id": "QK-fr-0057",
+      "text": "Que diable allait-il faire dans cette galère ?",
+      "author": "Molière",
+      "year": "1671",
+      "source": "Les Fourberies de Scapin, acte II, sc. 7",
+      "context": "Exclamation comique du personnage Géronte confronté à une situation inextricable, devenue proverbiale pour signifier une situation embarrassante.",
+      "tags": [
+        "theater",
+        "humor"
+      ]
+    },
+    {
+      "id": "QK-fr-0058",
+      "text": "Il faut manger pour vivre et non pas vivre pour manger.",
+      "author": "Molière",
+      "year": "1668",
+      "source": "L'Avare, acte III, sc. 1",
+      "context": "Maxime prononcée ironiquement dans *L'Avare* pour recommander la modération et railler la gourmandise.",
+      "tags": [
+        "theater",
+        "humor"
+      ]
+    },
+    {
+      "id": "QK-fr-0059",
+      "text": "Les forêts précèdent les peuples, les déserts les suivent.",
+      "author": "Chateaubriand",
+      "year": "1841",
+      "source": "Mémoires d'outre-tombe",
+      "context": "Réflexion de Chateaubriand sur l'histoire environnementale, indiquant que la déforestation accompagne le déclin des civilisations.",
+      "tags": [
+        "nature",
+        "civilization"
+      ]
+    },
+    {
+      "id": "QK-fr-0060",
+      "text": "De l'audace, encore de l'audace, toujours de l'audace!",
+      "author": "Georges Danton",
+      "year": "1792",
+      "source": "Discours à l'Assemblée législative",
+      "context": "Clôture du discours de Danton à l'Assemblée pendant la Révolution française, appelant à l'audace face au danger de l'invasion.",
+      "tags": [
+        "politics",
+        "revolution"
+      ]
+    },
+    {
+      "id": "QK-fr-0061",
+      "text": "Après le pain, l'éducation est le premier besoin du peuple.",
+      "author": "Georges Danton",
+      "year": "1793",
+      "source": "Discours à la Convention",
+      "context": "Proposition de Danton pendant la Révolution, affirmant l'importance cruciale de l'éducation populaire juste après la subsistance.",
+      "tags": [
+        "politics",
+        "society"
+      ]
+    },
+    {
+      "id": "QK-fr-0062",
+      "text": "Douter de tout ou tout croire, ce sont deux solutions également commodes qui nous dispensent de réfléchir.",
+      "author": "Henri Poincaré",
+      "year": "1903",
+      "source": "Science et hypothèse",
+      "context": "Réflexion de Poincaré sur l'attitude scientifique, dénonçant l'excès de scepticisme comme la crédulité, qui évitent l'effort de penser.",
+      "tags": [
+        "science",
+        "philosophy"
+      ]
+    },
+    {
+      "id": "QK-fr-0063",
+      "text": "Dans les champs de l'observation, le hasard ne favorise que les esprits préparés.",
+      "author": "Louis Pasteur",
+      "year": "1854",
+      "source": "Discours, Université de Lille",
+      "context": "Principe énoncé par Pasteur suggérant que les découvertes fortuites n'arrivent qu'à ceux qui sont intellectuellement prêts à les comprendre.",
+      "tags": [
+        "science",
+        "discovery"
+      ]
+    },
+    {
+      "id": "QK-fr-0064",
+      "text": "La femme est l'avenir de l'homme.",
+      "author": "Louis Aragon",
+      "year": "1963",
+      "source": "Le Fou d'Elsa",
+      "context": "Vers célèbre d’Aragon, repris comme slogan féministe, indiquant que l’émancipation féminine est essentielle au futur de l’humanité.",
+      "tags": [
+        "poetry",
+        "feminism"
+      ]
+    },
+    {
+      "id": "QK-fr-0065",
+      "text": "Paris vaut bien une messe.",
+      "author": "Henri IV",
+      "year": "1593",
+      "source": "Propos rapporté",
+      "context": "Phrase attribuée à Henri IV justifiant sa conversion au catholicisme pour accéder au trône de France (Paris méritant ce sacrifice religieux).",
+      "tags": [
+        "history",
+        "religion"
+      ]
+    },
+    {
+      "id": "QK-fr-0066",
+      "text": "Après nous, le déluge.",
+      "author": "Marquise de Pompadour",
+      "year": "1757",
+      "source": "Propos rapporté",
+      "context": "Mot célèbre attribué à Madame de Pompadour après la défaite de Rossbach, exprimant l'indifférence aux conséquences futures une fois qu'on aura disparu.",
+      "tags": [
+        "history",
+        "royalty"
+      ]
+    },
+    {
+      "id": "QK-fr-0067",
+      "text": "La guerre! C'est une chose trop grave pour la confier à des militaires.",
+      "author": "Georges Clemenceau",
+      "year": "1917",
+      "source": "Propos (attribué)",
+      "context": "Maxime attribuée à Clemenceau, Premier ministre français durant la Grande Guerre, soulignant que les décisions de guerre doivent rester aux civils.",
+      "tags": [
+        "politics",
+        "war"
+      ]
+    },
+    {
+      "id": "QK-fr-0068",
+      "text": "La France est un pays extrêmement fertile: on y plante des fonctionnaires, il y pousse des impôts.",
+      "author": "Georges Clemenceau",
+      "year": "1886",
+      "source": "Propos humoristique",
+      "context": "Trait d'esprit de Clemenceau illustrant avec humour la bureaucratie française et la propension à créer des taxes.",
+      "tags": [
+        "politics",
+        "humor"
+      ]
+    },
+    {
+      "id": "QK-fr-0069",
+      "text": "Le communisme, c'est l'exploitation de l'homme par l'homme. Le capitalisme, c'est le contraire.",
+      "author": "Coluche",
+      "year": "1980",
+      "source": "Sketch (extrait)",
+      "context": "Citation satirique de Coluche comparant communisme et capitalisme de manière ironique dans l'un de ses sketches.",
+      "tags": [
+        "humor",
+        "politics"
+      ]
+    },
+    {
+      "id": "QK-fr-0070",
+      "text": "Il faut donner du temps au temps.",
+      "author": "François Mitterrand",
+      "year": "1981",
+      "source": "Allocution télévisée",
+      "context": "Phrase fétiche de Mitterrand, utilisée notamment en 1981 après son élection, signifiant que les choses requièrent de la patience.",
+      "tags": [
+        "politics",
+        "wisdom"
+      ]
+    },
+    {
+      "id": "QK-fr-0071",
+      "text": "Il n'y a rien dans la vie à craindre, il faut seulement comprendre.",
+      "author": "Marie Curie",
+      "year": "1934",
+      "source": "Entretien",
+      "context": "Citation de Marie Curie encourageant la connaissance comme antidote à la peur, notamment face aux progrès scientifiques.",
+      "tags": [
+        "science",
+        "wisdom"
+      ]
+    },
+    {
+      "id": "QK-fr-0072",
+      "text": "Un seul être vous manque, et tout est dépeuplé.",
+      "author": "Alphonse de Lamartine",
+      "year": "1820",
+      "source": "Méditations poétiques (« L'Isolement »)",
+      "context": "Vers fameux de Lamartine exprimant la détresse ressentie lorsque l'être aimé n'est plus là.",
+      "tags": [
+        "poetry",
+        "love"
+      ]
+    },
+    {
+      "id": "QK-fr-0073",
+      "text": "Les paroles s'envolent, les écrits restent.",
+      "author": "Proverbe latin (attribué à Caius Titus)",
+      "year": "",
+      "source": "Locution latine",
+      "context": "Adage latin bien connu en français rappelant que ce qui est dit peut être oublié, alors que ce qui est écrit demeure.",
+      "tags": [
+        "communication",
+        "wisdom"
+      ]
+    },
+    {
+      "id": "QK-fr-0074",
+      "text": "Ceux qui ne se souviennent pas du passé sont condamnés à le répéter.",
+      "author": "Georges Santayana",
+      "year": "1905",
+      "source": "The Life of Reason (traduit en français)",
+      "context": "Aphorisme d'un philosophe traduit en français, souvent cité pour souligner l'importance de la mémoire historique.",
+      "tags": [
+        "history",
+        "philosophy"
+      ]
+    },
+    {
+      "id": "QK-fr-0075",
+      "text": "Il y a des hommes qui sont comme les contrefaçons de diamants : ils ont l'éclat, mais non la valeur.",
+      "author": "Sénèque",
+      "year": "65",
+      "source": "Lettres à Lucilius (traduit en français)",
+      "context": "Pensée du philosophe stoïcien Sénèque, citée ici en français, faisant une métaphore entre la fausse vertu des hommes et de faux diamants.",
+      "tags": [
+        "philosophy",
+        "morality"
+      ]
+    },
+    {
+      "id": "QK-fr-0076",
+      "text": "On ne peut pas, sous prétexte qu'il est impossible de tout faire en un jour, ne rien faire du tout.",
+      "author": "Abbé Pierre",
+      "year": "1981",
+      "source": "Conférence",
+      "context": "Maxime de l'Abbé Pierre encourageant à agir modestement sans se décourager de ne pouvoir tout accomplir en une fois.",
+      "tags": [
+        "charity",
+        "action"
+      ]
+    },
+    {
+      "id": "QK-fr-0077",
+      "text": "Il est grand temps de rallumer les étoiles.",
+      "author": "Guillaume Apollinaire",
+      "year": "1918",
+      "source": "Le Guetteur mélancolique",
+      "context": "Vers poétique d'Apollinaire invitant à redonner de l'espoir et de la lumière dans les périodes sombres.",
+      "tags": [
+        "poetry",
+        "hope"
+      ]
+    },
+    {
+      "id": "QK-fr-0078",
+      "text": "Les hommes naissent libres et égaux en droits.",
+      "author": "Déclaration des Droits de l'Homme et du Citoyen",
+      "year": "1789",
+      "source": "Article 1",
+      "context": "Principe fondamental énoncé dès l'article premier de la Déclaration de 1789, texte fondateur de la Révolution française en matière de droits universels.",
+      "tags": [
+        "rights",
+        "law"
+      ]
+    },
+    {
+      "id": "QK-fr-0079",
+      "text": "Rien ne sert de courir ; il faut partir à point.",
+      "author": "Jean de La Fontaine",
+      "year": "1668",
+      "source": "Fables (Le Lièvre et la Tortue)",
+      "context": "Moralité de la fable du Lièvre et de la Tortue, enseignant que la précipitation ne sert à rien et que la constance gagne.",
+      "tags": [
+        "fable",
+        "patience"
+      ]
+    },
+    {
+      "id": "QK-fr-0080",
+      "text": "La raison du plus fort est toujours la meilleure.",
+      "author": "Jean de La Fontaine",
+      "year": "1668",
+      "source": "Fables (Le Loup et l'Agneau)",
+      "context": "Moralité ironique de la fable Le Loup et l'Agneau, signifiant que les puissants imposent toujours leur logique aux faibles.",
+      "tags": [
+        "fable",
+        "power"
+      ]
+    },
+    {
+      "id": "QK-fr-0081",
+      "text": "On a souvent besoin d'un plus petit que soi.",
+      "author": "Jean de La Fontaine",
+      "year": "1668",
+      "source": "Fables (Le Lion et le Rat)",
+      "context": "Moralité de la fable Le Lion et le Rat, illustrant qu'un puissant peut avoir besoin de l'aide d'un plus faible un jour.",
+      "tags": [
+        "fable",
+        "solidarity"
+      ]
+    },
+    {
+      "id": "QK-fr-0082",
+      "text": "Aide-toi, le ciel t'aidera.",
+      "author": "Jean de La Fontaine",
+      "year": "1678",
+      "source": "Fables (Le Chartier embourbé)",
+      "context": "Moralité qui enseigne qu'il faut d'abord s'efforcer soi-même avant d'attendre une aide divine ou extérieure.",
+      "tags": [
+        "fable",
+        "morality"
+      ]
+    },
+    {
+      "id": "QK-fr-0083",
+      "text": "Selon que vous serez puissant ou misérable, les jugements de cour vous rendront blanc ou noir.",
+      "author": "Jean de La Fontaine",
+      "year": "1678",
+      "source": "Fables (Les Animaux malades de la peste)",
+      "context": "Vers célèbres dénonçant l'injustice des tribunaux qui épargnent les puissants et condamnent les faibles, tirés de la fable Les Animaux malades de la peste.",
+      "tags": [
+        "fable",
+        "justice"
+      ]
+    },
+    {
+      "id": "QK-fr-0084",
+      "text": "Tel est pris qui croyait prendre.",
+      "author": "Jean de La Fontaine",
+      "year": "1678",
+      "source": "Fables (Le Rat et l'Huître)",
+      "context": "Moralité d'une fable de La Fontaine signifiant que le trompeur finit parfois piégé par plus rusé que lui.",
+      "tags": [
+        "fable",
+        "irony"
+      ]
+    },
+    {
+      "id": "QK-fr-0085",
+      "text": "Il ne faut pas vendre la peau de l'ours avant de l'avoir tué.",
+      "author": "Jean de La Fontaine",
+      "year": "1678",
+      "source": "Fables (L'Ours et les deux Compagnons)",
+      "context": "Proverbe popularisé par La Fontaine conseillant de ne pas se réjouir ou tirer profit d'un succès avant de l'avoir effectivement obtenu.",
+      "tags": [
+        "fable",
+        "prudence"
+      ]
+    },
+    {
+      "id": "QK-fr-0086",
+      "text": "Ni le soleil ni la mort ne se peuvent regarder fixement.",
+      "author": "François de La Rochefoucauld",
+      "year": "1678",
+      "source": "Maximes (édition 1678)",
+      "context": "Maxime de La Rochefoucauld soulignant la difficulté d’affronter directement les grandes vérités inévitables comme la mort.",
+      "tags": [
+        "mortality",
+        "truth"
+      ]
+    },
+    {
+      "id": "QK-fr-0087",
+      "text": "Le plus bel amour ne va pas loin si on le regarde courir.",
+      "author": "Antonin Artaud",
+      "year": "1925",
+      "source": "L'Ombilic des limbes",
+      "context": "Réflexion poétique d'Artaud suggérant que l'analyse ou l'observation excessive peut tuer la spontanéité de l'amour.",
+      "tags": [
+        "love",
+        "observation"
+      ]
+    },
+    {
+      "id": "QK-fr-0088",
+      "text": "Quand la vérité n'est pas libre, la liberté n'est pas vraie.",
+      "author": "Jacques Prévert",
+      "year": "1946",
+      "source": "Pensées",
+      "context": "Maxime de Prévert insistant sur l'indissociabilité de la liberté et de la vérité : sans liberté d'expression, la liberté est illusoire.",
+      "tags": [
+        "freedom",
+        "truth"
+      ]
+    },
+    {
+      "id": "QK-fr-0089",
+      "text": "Les cons, ça ose tout. C'est même à ça qu'on les reconnaît.",
+      "author": "Michel Audiard",
+      "year": "1963",
+      "source": "Dialogue du film « Les Tontons flingueurs »",
+      "context": "Réplique culte écrite par Audiard dans *Les Tontons flingueurs*, devenue proverbiale pour moquer l'audace des imbéciles.",
+      "tags": [
+        "humor",
+        "cinema"
+      ]
+    },
+    {
+      "id": "QK-fr-0090",
+      "text": "Les hommes politiques ne connaissent la misère que par les statistiques. On ne pleure pas devant les chiffres.",
+      "author": "Abbé Pierre",
+      "year": "1989",
+      "source": "Entretien (tirade célèbre)",
+      "context": "Observation critique de l'Abbé Pierre sur le décalage entre les réalités humaines de la misère et la vision abstraite qu'en ont les dirigeants à travers des chiffres.",
+      "tags": [
+        "poverty",
+        "politics"
+      ]
+    },
+    {
+      "id": "QK-fr-0091",
+      "text": "Les extrêmes se touchent.",
+      "author": "Victor Hugo",
+      "year": "1875",
+      "source": "Tas de pierres",
+      "context": "Aphorisme de Hugo notant que des positions radicalement opposées peuvent finir par se ressembler ou converger.",
+      "tags": [
+        "paradox",
+        "society"
+      ]
+    },
+    {
+      "id": "QK-fr-0092",
+      "text": "Les cimetières sont pleins de gens irremplaçables, qui ont tous été remplacés.",
+      "author": "Georges Clemenceau",
+      "year": "1929",
+      "source": "Propos rapporté",
+      "context": "Trait d'esprit de Clemenceau rappelant avec ironie qu'aucune personne n'est réellement indispensable à long terme.",
+      "tags": [
+        "humor",
+        "wisdom"
+      ]
+    },
+    {
+      "id": "QK-fr-0093",
+      "text": "La preuve que la lune est habitée, c'est qu'il y a de la lumière.",
+      "author": "Coluche",
+      "year": "1980",
+      "source": "Sketch (Le flic)",
+      "context": "Plaisanterie absurde de Coluche jouant sur la confusion entre lumière lunaire et présence d'habitants, pour faire rire du raisonnement fallacieux.",
+      "tags": [
+        "humor",
+        "absurdity"
+      ]
+    },
+    {
+      "id": "QK-fr-0094",
+      "text": "Les Français sont des Italiens de mauvaise humeur.",
+      "author": "Jean Cocteau",
+      "year": "1952",
+      "source": "Propos",
+      "context": "Formule piquante de Cocteau comparant le tempérament des Français et des Italiens avec une pointe d'humour.",
+      "tags": [
+        "humor",
+        "nationality"
+      ]
+    },
+    {
+      "id": "QK-fr-0095",
+      "text": "Un homme heureux est trop content du présent pour trop se soucier de l'avenir.",
+      "author": "Albert Einstein",
+      "year": "1934",
+      "source": "Comment je vois le monde (traduit en français)",
+      "context": "Réflexion attribuée à Einstein (citation traduite) soulignant que le bonheur implique de vivre pleinement le moment présent.",
+      "tags": [
+        "happiness",
+        "philosophy"
+      ]
+    }
+  ]
+}

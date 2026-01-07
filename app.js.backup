@@ -1,7 +1,5 @@
 // Import du module RAG (recherche sémantique)
 import * as RAG from './rag.js';
-// Import du module OpenAI (génération de citations)
-import * as OpenAI from './openai.js';
 
 const STORAGE={prefs:"mvp_prefs_v1",history:"mvp_history_v1",daily:"mvp_daily_v1"};
 
@@ -63,19 +61,6 @@ function setQuestionFlowVisible(yes){
   const el = qs("questionFlow");
   if(!el) return;
   el.classList.toggle("hidden", !yes);
-}
-
-function showRAGFreeTextFlow(yes){
-  const el = qs("ragFreeTextFlow");
-  if(!el) return;
-  el.classList.toggle("active", yes);
-}
-
-function showClassicQuestionFlow(yes){
-  // Cache/affiche les variantes de besoin et humeur
-  document.querySelectorAll(".need-variant, .mood-variant, #moodStep, #quoteActionRow").forEach(el => {
-    el.style.display = yes ? "block" : "none";
-  });
 }
 
 function resetQuoteUI(){
@@ -200,10 +185,6 @@ function ctxFromUI(){
   return {
     need: qs("need").value||null,
     mood: qs("mood").value||null,
-    needLabel: qs("needLabel")?.value||null,
-    moodLabel: qs("moodLabel")?.value||null,
-    needQuestion: qs("needQuestion")?.value||null,
-    moodQuestion: qs("moodQuestion")?.value||null,
     tonePref: prefs.tonePref||null,
     energyCap: String(prefs.energyCap||3)
   };
@@ -228,46 +209,15 @@ function syncPrefsIntoSettings(){
   const p=getJ(STORAGE.prefs);
   qs("setTone").value=p.tonePref||"";
   qs("setEnergy").value=String(p.energyCap||2);
-  const mode = getMode(p);
-  qs("setMode").value=mode;
-  
-  // Afficher la clé API masquée si elle existe
-  const apiKeyInput = qs("setApiKey");
-  if(apiKeyInput && OpenAI.hasApiKey()){
-    apiKeyInput.placeholder = OpenAI.getApiKeyMasked();
-  }
-  
-  // Afficher/masquer la config OpenAI selon le mode
-  const openaiConfig = qs("openaiConfig");
-  if(openaiConfig){
-    openaiConfig.style.display = mode === "openai" ? "block" : "none";
-  }
+  qs("setMode").value=getMode(p);
 }
 
-function pushSeen(id, text = null){
+function pushSeen(id){
   const h=getJ(STORAGE.history);
   h.seen=h.seen||[];
   h.seen.push(id);
   if(h.seen.length>60) h.seen=h.seen.slice(-60);
-  
-  // Stocker aussi le texte pour les citations générées par OpenAI
-  if(text){
-    h.seenTexts = h.seenTexts || [];
-    h.seenTexts.push(text);
-    if(h.seenTexts.length > 30) h.seenTexts = h.seenTexts.slice(-30);
-  }
-  
   setJ(STORAGE.history,h);
-}
-
-function getSeenTexts(){
-  const h=getJ(STORAGE.history);
-  return h.seenTexts || [];
-}
-
-function getSeenIds(){
-  const h=getJ(STORAGE.history);
-  return h.seen || [];
 }
 
 function feedback(c,kind){
@@ -298,7 +248,7 @@ function ensureCitationsReady(){
 }
 
 // ===== MODE RAG =====
-async function handleRAGMode(ctx, freeTextQuery = null){
+async function handleRAGMode(ctx){
   // Vérifier la disponibilité du serveur RAG
   const isHealthy = await RAG.checkHealth();
   if(!isHealthy){
@@ -306,29 +256,11 @@ async function handleRAGMode(ctx, freeTextQuery = null){
     return;
   }
 
-  // Si freeTextQuery est fourni, l'utiliser directement comme query
-  let query;
-  if(freeTextQuery){
-    query = freeTextQuery;
-  } else {
-    // Sinon, construire la requête sémantique à partir du besoin et de l'humeur
-    query = RAG.buildSearchQuery({
-      need: ctx.need, 
-      mood: ctx.mood,
-      needLabel: ctx.needLabel,
-      moodLabel: ctx.moodLabel,
-      needQuestion: ctx.needQuestion,
-      moodQuestion: ctx.moodQuestion,
-      tonePref: ctx.tonePref,
-      energyCap: ctx.energyCap
-    });
-  }
+  // Construire la requête sémantique à partir du besoin et de l'humeur
+  const query = RAG.buildSearchQuery({need: ctx.need, mood: ctx.mood});
   
-  // Récupérer les IDs des citations déjà vues (30 derniers)
-  const seenIds = getSeenIds().slice(-30);
-  
-  // Lancer la recherche sémantique (top 3) en excluant les déjà vues
-  const results = await RAG.search(query, 3, seenIds);
+  // Lancer la recherche sémantique
+  const results = await RAG.search(query, 5);
   
   if(!results || results.length === 0){
     alert("Aucun résultat trouvé pour cette recherche.");
@@ -336,240 +268,46 @@ async function handleRAGMode(ctx, freeTextQuery = null){
   }
 
   // Afficher les résultats
-  renderRAGResults(results, ctx, query);
+  renderRAGResults(results, ctx);
 }
 
-// ===== MODE OPENAI =====
-async function handleOpenAIMode(ctx, freeTextQuery = null){
-  // Vérifier que la clé API est configurée
-  if(!OpenAI.hasApiKey()){
-    alert("⚠️ Clé API OpenAI manquante.\n\nVa dans les paramètres pour la configurer.");
-    return;
-  }
-
-  // Préparer le contexte pour OpenAI
-  const openAIContext = {
-    need: ctx.need,
-    mood: ctx.mood,
-    needLabel: ctx.needLabel,
-    moodLabel: ctx.moodLabel,
-    tonePref: ctx.tonePref,
-    energyCap: ctx.energyCap,
-    freeText: freeTextQuery
-  };
-
-  // Récupérer les citations déjà vues
-  const seenTexts = getSeenTexts();
-
-  try {
-    // Générer la citation via OpenAI
-    const result = await OpenAI.generateQuote(openAIContext, seenTexts);
-    
-    if(!result || !result.text){
-      alert("Aucune citation générée.");
-      return;
-    }
-
-    // Afficher le résultat
-    renderOpenAIResult(result, ctx);
-    
-    // Sauvegarder dans l'historique
-    const generatedId = `openai_${Date.now()}`;
-    pushSeen(generatedId, result.text);
-    
-  } catch (error) {
-    console.error('[OpenAI] Erreur:', error);
-    alert(`Erreur lors de la génération:\n${error.message}`);
-  }
-}
-
-function renderOpenAIResult(result, ctx){
+function renderRAGResults(results, ctx){
   setQuestionFlowVisible(false);
   
   const quoteBox = qs("quoteBox");
   const feedbackRow = qs("feedbackRow");
   const detailsRow = qs("detailsRow");
-  const detailsBox = qs("detailsBox");
-  
-  quoteBox.style.display="block";
-  feedbackRow.style.display="none"; // Pas de feedback pour OpenAI (pour l'instant)
-  detailsRow.style.display="flex";
-  detailsBox.style.display="none";
-  
-  // Afficher la citation générée
-  const lines = result.text.split('\n').filter(l => l.trim());
-  const quoteParts = result.text.match(/^"(.+?)"\s*—\s*(.+)$/s) || 
-                     result.text.match(/^(.+?)\s*—\s*(.+)$/s);
-  
-  let displayText = result.text;
-  let author = 'OpenAI';
-  
-  if (quoteParts && quoteParts.length >= 3) {
-    displayText = quoteParts[1].replace(/^"|"$/g, '').trim();
-    author = quoteParts[2].trim();
-  } else if (lines.length >= 2 && lines[lines.length-1].startsWith('—')) {
-    author = lines[lines.length-1].replace('—', '').trim();
-    displayText = lines.slice(0, -1).join('\n').replace(/^"|"$/g, '').trim();
-  }
-  
-  let html = `
-    <div class="muted" style="margin-bottom:12px;">✨ <b>Généré par OpenAI</b> — Citation unique pour toi</div>
-    <div style="font-size:1.3em; line-height:1.5; margin-bottom:12px;">${displayText}</div>
-    <div class="muted">— ${author}</div>
-  `;
-  
-  quoteBox.innerHTML = html;
-  
-  // Préparer le contenu des détails
-  let detailsHtml = `
-    <div style="margin-bottom:16px;">
-      <div class="muted" style="margin-bottom:8px;"><b>🤖 Génération IA :</b></div>
-      <div style="padding:12px; background:#0c0e14; border-radius:8px; border:1px solid #2a3145;">
-        <div style="margin-bottom:8px;"><span class="pill" style="font-size:11px;">Modèle: ${result.metadata.model}</span></div>
-        <div class="muted" style="font-size:11px;">Cette citation a été générée spécifiquement pour ton contexte actuel.</div>
-      </div>
-    </div>
-  `;
-
-  // Afficher le prompt exact envoyé à OpenAI
-  if (result.promptSent) {
-    detailsHtml += `
-      <div style="margin-bottom:16px;">
-        <div class="muted" style="margin-bottom:8px;"><b>📝 Prompt envoyé à OpenAI :</b></div>
-        <div style="padding:12px; background:#0c0e14; border-radius:8px; border:1px solid #2a3145; font-family:monospace; white-space:pre-wrap; line-height:1.4;">
-          ${escapeHtml(result.promptSent)}
-        </div>
-      </div>
-    `;
-  }
-  
-  if(ctx.freeText){
-    detailsHtml += `
-      <div style="margin-bottom:16px;">
-        <div class="muted" style="margin-bottom:8px;"><b>📝 Ta demande :</b></div>
-        <div style="padding:12px; background:#0c0e14; border-radius:8px; border:1px solid #2a3145; font-style:italic;">
-          "${ctx.freeText}"
-        </div>
-      </div>
-    `;
-  } else {
-    detailsHtml += `
-      <div>
-        <div class="muted" style="margin-bottom:8px;"><b>🎯 Contexte :</b></div>
-        <div style="display:flex; flex-wrap:wrap; gap:6px;">
-          ${ctx.tonePref ? `<span class="pill" style="font-size:11px;">ton: ${ctx.tonePref}</span>` : ''}
-          ${ctx.energyCap ? `<span class="pill" style="font-size:11px;">énergie max: ${ctx.energyCap}</span>` : ''}
-        </div>
-      </div>
-    `;
-  }
-  
-  detailsBox.innerHTML = detailsHtml;
-  
-  // Stocker le contexte
-  LAST_CTX = ctx;
-}
-
-// Protège l'affichage du prompt dans le HTML
-function escapeHtml(str){
-  if(!str) return '';
-  return str
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#39;");
-}
-function renderRAGResults(results, ctx, query){
-  setQuestionFlowVisible(false);
-  
-  const quoteBox = qs("quoteBox");
-  const feedbackRow = qs("feedbackRow");
-  const detailsRow = qs("detailsRow");
-  const detailsBox = qs("detailsBox");
   
   quoteBox.style.display="block";
   feedbackRow.style.display="none"; // Pas de feedback en mode RAG
-  detailsRow.style.display="flex"; // Afficher le bouton détails
-  detailsBox.style.display="none"; // Cacher les détails par défaut
+  detailsRow.style.display="none"; // Pas de détails en mode RAG
   
-  // Afficher seulement la top 1 citation
-  const top = results[0];
-  const author = top.metadata?.author || 'Anonyme';
+  // Formatter les résultats: Top 5 avec scores
+  let html = '<div style="margin-bottom:20px;"><div class="muted" style="margin-bottom:12px;">🔍 <b>Mode RAG</b> — Recherche sémantique (Top 5)</div>';
   
-  let html = `
-    <div class="muted" style="margin-bottom:12px;">🔍 <b>Mode RAG</b> — Recherche sémantique</div>
-    <div style="font-size:1.3em; line-height:1.5; margin-bottom:12px;">${top.text}</div>
-    <div class="muted">— ${author}</div>
-  `;
-  
-  quoteBox.innerHTML = html;
-  
-  // Préparer le contenu des détails (query + top 3)
-  let detailsHtml = `
-    <div style="margin-bottom:16px;">
-      <div class="muted" style="margin-bottom:8px;"><b>📝 Requête envoyée au RAG :</b></div>
-      <div style="padding:12px; background:#0c0e14; border-radius:8px; border:1px solid #2a3145; font-style:italic;">
-        "${query}"
-      </div>
-    </div>
-    <div>
-      <div class="muted" style="margin-bottom:8px;"><b>🎯 Top 3 des résultats :</b></div>
-  `;
-  
-  results.slice(0, 3).forEach((r, idx) => {
+  results.forEach((r, idx) => {
     const rank = idx + 1;
     const score = r.score ? r.score.toFixed(3) : 'N/A';
-    const m = r.metadata || {};
-    const author = m.author || 'Anonyme';
+    const author = r.metadata?.author || 'Anonyme';
     
-    // Construire les pills de métadonnées
-    const metaPills = [];
-    if (m.need) metaPills.push(`need: ${m.need}`);
-    if (m.mood) metaPills.push(`mood: ${m.mood}`);
-    if (m.tone) metaPills.push(`tone: ${m.tone}`);
-    if (m.energy) metaPills.push(`energy: ${m.energy}`);
-    if (m.length) metaPills.push(`length: ${m.length}`);
-    if (m.language) metaPills.push(`lang: ${m.language}`);
-    
-    // Flags booléens
-    const flags = [];
-    if (m.is_injunctive) flags.push('injonctif');
-    if (m.is_guilt_inducing) flags.push('culpabilisant');
-    if (m.is_toxic_positive) flags.push('toxic+');
-    
-    detailsHtml += `
-      <div style="padding:14px; margin-bottom:12px; border:1px solid #2a3145; border-radius:8px; background:#0c0e14;">
+    html += `
+      <div style="padding:16px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px; background:#f9f9f9;">
         <div style="margin-bottom:8px;">
-          <span style="font-weight:bold;">#${rank}</span>
-          <span class="pill" style="margin-left:8px; font-size:11px;">score: ${score}</span>
+          <span style="font-weight:bold; color:#333;">#${rank}</span>
+          <span class="pill" style="margin-left:8px;">score: ${score}</span>
         </div>
-        <div style="line-height:1.5; margin-bottom:10px; font-size:1.05em;">${r.text}</div>
-        <div class="muted" style="font-size:11px; margin-bottom:8px;">— ${author}</div>
-        ${metaPills.length > 0 ? `
-          <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px;">
-            ${metaPills.map(pill => `<span class="pill" style="font-size:10px; padding:3px 8px;">${pill}</span>`).join('')}
-          </div>
-        ` : ''}
-        ${flags.length > 0 ? `
-          <div style="display:flex; flex-wrap:wrap; gap:4px;">
-            ${flags.map(flag => `<span class="pill" style="font-size:10px; padding:3px 8px; background:#2a1a1a; border-color:#5a3145;">⚠️ ${flag}</span>`).join('')}
-          </div>
-        ` : ''}
+        <div style="font-size:1.1em; line-height:1.5; margin-bottom:8px;">${r.text}</div>
+        <div class="muted">— ${author}</div>
       </div>
     `;
   });
   
-  detailsHtml += '</div>';
-  detailsBox.innerHTML = detailsHtml;
+  html += '<div class="muted" style="margin-top:16px;">💡 Pour changer de mode, va dans les paramètres.</div></div>';
+  
+  quoteBox.innerHTML = html;
   
   // Stocker le contexte pour référence
   LAST_CTX = ctx;
-  
-  // Sauvegarder l'ID de la citation affichée dans l'historique
-  if(results && results.length > 0 && results[0].id){
-    pushSeen(results[0].id);
-  }
 }
 
 (async function init(){
@@ -640,23 +378,10 @@ function renderRAGResults(results, ctx, query){
     const tone=qs("setTone").value||"";
     const energy=parseInt(qs("setEnergy").value||"2",10);
     const mode=qs("setMode").value||"regles";
-    const apiKey=qs("setApiKey")?.value?.trim();
-    
     if(!tone){
       alert("Choisis un ton.");
       return;
     }
-    
-    // Sauvegarder la clé API si elle est fournie
-    if(apiKey && apiKey.length > 0){
-      try {
-        OpenAI.setApiKey(apiKey);
-      } catch(err) {
-        alert(`Erreur clé API: ${err.message}`);
-        return;
-      }
-    }
-    
     const p=getJ(STORAGE.prefs);
     p.tonePref=tone;
     p.energyCap=clamp(energy,1,3);
@@ -664,15 +389,6 @@ function renderRAGResults(results, ctx, query){
     setJ(STORAGE.prefs,p);
     updateSubtitle();
     closeSettings();
-  });
-  
-  // Afficher/masquer la config OpenAI selon le mode sélectionné
-  on("setMode","change",()=>{
-    const mode = qs("setMode").value;
-    const openaiConfig = qs("openaiConfig");
-    if(openaiConfig){
-      openaiConfig.style.display = mode === "openai" ? "block" : "none";
-    }
   });
 
   // Main flow
@@ -710,7 +426,7 @@ function renderRAGResults(results, ctx, query){
     });
   });
 
-  on("btnGetQuote","click", async ()=>{
+  on("btnGetQuote","click",()=>{
     const p=getJ(STORAGE.prefs);
     if(!hasCompletedOnboarding(p)){
       show(qs("onboardingScreen"),true);
@@ -720,25 +436,10 @@ function renderRAGResults(results, ctx, query){
     }
     const ctx=ctxFromUI();
     if(!ctx.need || !ctx.mood){
-      alert("Choisis d'abord un besoin, puis une humeur.");
+      alert("Choisis d’abord un besoin, puis une humeur.");
       return;
     }
 
-    const mode = getMode(p);
-    
-    // Mode OpenAI: génération IA
-    if(mode === 'openai'){
-      await handleOpenAIMode(ctx);
-      return;
-    }
-    
-    // Mode RAG: recherche sémantique
-    if(mode === 'rag'){
-      await handleRAGMode(ctx);
-      return;
-    }
-
-    // Mode règles: moteur classique
     if(!ensureCitationsReady()) return;
 
     const c=pick(ALL,ctx);
@@ -750,50 +451,6 @@ function renderRAGResults(results, ctx, query){
     LAST_CTX=ctx;
     render(c);
     pushSeen(c.id);
-  });
-
-  // Mode RAG: texte libre
-  on("btnGetQuoteRAG", "click", async ()=>{
-    const p=getJ(STORAGE.prefs);
-    if(!hasCompletedOnboarding(p)){
-      show(qs("onboardingScreen"),true);
-      show(qs("mainScreen"),false);
-      qs("btnOpenSettings").style.visibility="hidden";
-      return;
-    }
-    
-    const freeText = qs("ragFreeTextInput")?.value?.trim();
-    if(!freeText){
-      alert("Écris quelque chose pour que je puisse t'aider.");
-      return;
-    }
-
-    const ctx = ctxFromUI();
-    ctx.tonePref = p.tonePref || "";
-    ctx.energyCap = String(p.energyCap || 3);
-
-    const mode = getMode(p);
-
-    // Mode OpenAI: génération IA avec texte libre
-    if(mode === 'openai'){
-      await handleOpenAIMode(ctx, freeText);
-      return;
-    }
-
-    // Mode RAG avec texte libre
-    await handleRAGMode(ctx, freeText);
-  });
-
-  // Suggestion chips: remplir le texte libre
-  document.querySelectorAll(".suggestion-chip").forEach((btn)=>{
-    btn.addEventListener("click", ()=>{
-      const suggestion = btn.getAttribute("data-suggestion");
-      const textarea = qs("ragFreeTextInput");
-      if(textarea){
-        textarea.value = suggestion;
-        textarea.focus();
-      }
-    });
   });
 
   // Toggle détails

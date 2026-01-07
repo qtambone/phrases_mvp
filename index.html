@@ -96,6 +96,59 @@
       opacity: 0.8;
       color: #c3cbff;
     }
+
+    /* ==== Styles pour mode RAG texte libre ==== */
+    .rag-free-text-section {
+      display: none;
+    }
+    .rag-free-text-section.active {
+      display: block;
+    }
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #2a3145;
+      background: #0c0e14;
+      color: #eaf0ff;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+    }
+    textarea:focus {
+      border-color: #3a4663;
+    }
+    .text-suggestions {
+      margin-top: 12px;
+      padding: 12px;
+      background: #0c0e14;
+      border: 1px dashed #2a3145;
+      border-radius: 12px;
+    }
+    .text-suggestions .label {
+      font-size: 12px;
+      opacity: 0.8;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .suggestion-chip {
+      display: inline-block;
+      font-size: 11px;
+      padding: 6px 10px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      border-radius: 999px;
+      border: 1px solid #2a3145;
+      background: transparent;
+      color: #c3cbff;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .suggestion-chip:hover {
+      background: #1a1d2a;
+      border-color: #3a4663;
+    }
   </style>
 </head>
 <body>
@@ -144,6 +197,29 @@
     <div class="card" id="mainScreen" style="display:none;">
 
       <div id="questionFlow">
+
+      <!-- Mode RAG: texte libre -->
+      <div class="rag-free-text-section" id="ragFreeTextFlow">
+        <h1>Et maintenant, à toi de jouer !</h1>
+        <div class="muted">Tape librement ce qui te préoccupe, décris ta situation, tes pensées, ce dont tu as envie…</div>
+        
+        <textarea id="ragFreeTextInput" placeholder="Écris ici tes pensées..." style="margin-top: 12px; min-height: 100px;"></textarea>
+        
+        <div class="text-suggestions">
+          <span class="label">📝 Des idées pour commencer :</span>
+          <div>
+            <span class="suggestion-chip" data-suggestion="Aujourd'hui j'ai un rendez-vous important, j'ai besoin de calme et de confiance.">Rendez-vous important</span>
+            <span class="suggestion-chip" data-suggestion="Je me sens débordé par tout ce qu'il y a à faire, j'ai besoin de relâcher.">Débordé·e</span>
+            <span class="suggestion-chip" data-suggestion="Je doute de moi et de mes choix, j'aurais besoin de clarté.">Doute personnel</span>
+            <span class="suggestion-chip" data-suggestion="Je traverse une période difficile, j'aimerais être réconforté.">Période difficile</span>
+            <span class="suggestion-chip" data-suggestion="Je me sens vide et sans énergie, je cherche de la motivation.">Manque d'énergie</span>
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top: 14px;">
+          <button class="primary" id="btnGetQuoteRAG">Trouver une citation</button>
+        </div>
+      </div>
 
       <!-- Besoin — version rapide -->
       <div class="need-variant" data-variant="quick">
@@ -333,6 +409,12 @@
           <option value="triste">Triste</option>
           <option value="motivé">Motivé</option>
         </select>
+
+        <!-- Labels textuels pour le mode RAG -->
+        <input type="hidden" id="needLabel" value="">
+        <input type="hidden" id="moodLabel" value="">
+        <input type="hidden" id="needQuestion" value="">
+        <input type="hidden" id="moodQuestion" value="">
       </div>
 
       <div class="actions" id="quoteActionRow" style="margin-top:16px; display:none;">
@@ -384,14 +466,29 @@
           <option value="3">3 (tout)</option>
         </select>
         <div class="muted">Garde-fou : limite l’intensité des citations. 1 = très soft, 2 = modéré, 3 = sans limite.</div>
-      </div>
+      </div>      <div>
+        <label for="setMode">Mode de recherche</label>
+        <select id="setMode">
+          <option value="regles">Règles (moteur classique)</option>
+          <option value="rag">RAG (recherche sémantique)</option>
+          <option value="openai">OpenAI (génération IA)</option>
+        </select>
+        <div class="muted">Règles = moteur existant. RAG = recherche sémantique. OpenAI = génération de citations uniques.</div>
+      </div>    </div>
+    
+    <!-- Configuration OpenAI -->
+    <div id="openaiConfig" style="display:none; margin-top:14px; padding:14px; background:#0c0e14; border:1px solid #2a3145; border-radius:12px;">
+      <h3 style="margin:0 0 10px; font-size:13px;">🔑 Configuration OpenAI</h3>
+      <label for="setApiKey" style="font-size:12px;">Clé API OpenAI</label>
+      <input type="password" id="setApiKey" placeholder="sk-..." style="width:100%; padding:10px 12px; margin-top:6px; border-radius:12px; border:1px solid #2a3145; background:#0c0e14; color:#eaf0ff; font-family:inherit; font-size:13px; outline:none;" />
+      <div class="muted" style="margin-top:6px; font-size:11px;">Obtiens ta clé sur <a href="https://platform.openai.com/api-keys" target="_blank" style="color:#1b3cff;">platform.openai.com</a>. Elle reste stockée localement dans ton navigateur.</div>
     </div>
     <div class="actions">
       <button class="primary" id="btnSaveSettings">Enregistrer</button>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
   <script>
     // Sélection aléatoire d'une seule variante besoin + humeur
     (function(){
@@ -416,15 +513,44 @@
         document.querySelectorAll(selector).forEach(el => el.classList.remove("selected"));
       }
 
+      function shouldUseFreeText() {
+        // Vérifie le mode sauvegardé
+        try {
+          const prefs = JSON.parse(localStorage.getItem("mvp_prefs_v1") || "{}");
+          // 50% du temps en mode RAG ou OpenAI
+          return (prefs.mode === "rag" || prefs.mode === "openai") && Math.random() < 0.5;
+        } catch {
+          return false;
+        }
+      }
+
       function setupNeedAndMoodUI() {
-        // Choisir une variante de besoin et une variante d'humeur à chaque ouverture
-        pickRandomVariant(".need-variant");
-        pickRandomVariant(".mood-variant");
+        // Décider aléatoirement si on affiche le flow texte libre ou classique (pour RAG et OpenAI)
+        const useFreeText = shouldUseFreeText();
+        
+        const ragFreeTextFlow = document.getElementById("ragFreeTextFlow");
+        const needVariants = document.querySelectorAll(".need-variant");
+        const moodStep = document.getElementById("moodStep");
+        const quoteActionRow = document.getElementById("quoteActionRow");
+
+        if (useFreeText) {
+          // Mode texte libre (RAG ou OpenAI)
+          if (ragFreeTextFlow) ragFreeTextFlow.classList.add("active");
+          needVariants.forEach(v => v.style.display = "none");
+          if (moodStep) moodStep.style.display = "none";
+          if (quoteActionRow) quoteActionRow.style.display = "none";
+        } else {
+          // Mode classique: choix besoin + humeur
+          if (ragFreeTextFlow) ragFreeTextFlow.classList.remove("active");
+          needVariants.forEach(v => v.style.display = "block");
+          
+          // Choisir une variante de besoin et une variante d'humeur à chaque ouverture
+          pickRandomVariant(".need-variant");
+          pickRandomVariant(".mood-variant");
+        }
 
         const needSelect = document.getElementById("need");
         const moodSelect = document.getElementById("mood");
-        const moodStep = document.getElementById("moodStep");
-        const quoteActionRow = document.getElementById("quoteActionRow");
 
         document.querySelectorAll(".need-chip, .need-card, .need-quiz").forEach(btn => {
           btn.addEventListener("click", () => {
@@ -434,6 +560,19 @@
             if (btn.classList.contains("need-card")) selectGroup(".need-card", btn);
             if (btn.classList.contains("need-quiz")) selectGroup(".need-quiz", btn);
 
+            // Stocker le label textuel pour le RAG
+            const labelEl = btn.querySelector(".label");
+            const needLabelInput = document.getElementById("needLabel");
+            const needQuestionInput = document.getElementById("needQuestion");
+            if (needLabelInput && labelEl) {
+              needLabelInput.value = labelEl.textContent.trim();
+            }
+            // Stocker aussi la question
+            const questionH1 = btn.closest(".need-variant").querySelector("h1");
+            if (needQuestionInput && questionH1) {
+              needQuestionInput.value = questionH1.textContent.trim();
+            }
+
             // Flow: après le besoin, on affiche l'étape humeur et on réinitialise l'humeur.
             if (moodStep) moodStep.style.display = "block";
             if (moodSelect) moodSelect.value = "";
@@ -441,6 +580,9 @@
             clearGroup(".mood-weather");
             clearGroup(".mood-phrase");
             if (quoteActionRow) quoteActionRow.style.display = "none";
+
+            // Relancer le tirage aléatoire pour la variante d'humeur
+            pickRandomVariant(".mood-variant");
 
             if (typeof window.resetQuoteUI === "function") window.resetQuoteUI();
           });
@@ -453,6 +595,19 @@
             if (btn.classList.contains("mood-chip")) selectGroup(".mood-chip", btn);
             if (btn.classList.contains("mood-weather")) selectGroup(".mood-weather", btn);
             if (btn.classList.contains("mood-phrase")) selectGroup(".mood-phrase", btn);
+
+            // Stocker le label textuel pour le RAG
+            const labelEl = btn.querySelector(".label");
+            const moodLabelInput = document.getElementById("moodLabel");
+            const moodQuestionInput = document.getElementById("moodQuestion");
+            if (moodLabelInput && labelEl) {
+              moodLabelInput.value = labelEl.textContent.trim();
+            }
+            // Stocker aussi la question
+            const questionH1 = btn.closest(".mood-variant").querySelector("h1");
+            if (moodQuestionInput && questionH1) {
+              moodQuestionInput.value = questionH1.textContent.trim();
+            }
 
             // Une fois l'humeur choisie, on peut proposer le bouton "Voir ma citation".
             if (quoteActionRow) quoteActionRow.style.display = "flex";
