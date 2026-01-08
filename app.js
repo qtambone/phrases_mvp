@@ -13,7 +13,7 @@ function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
 function hourBucket(){const h=new Date().getHours(); if(h<11)return "matin"; if(h<18)return "jour"; return "soir";}
 
 function hasCompletedOnboarding(prefs){
-  return Boolean(prefs && prefs.tonePref && typeof prefs.energyCap==="number");
+  return Boolean(prefs && prefs.onboarded);
 }
 
 function getMode(prefs){
@@ -51,12 +51,10 @@ function labelTone(t){
 
 function updateSubtitle(){
   const p=getJ(STORAGE.prefs);
-  const tone=labelTone(p.tonePref);
-  const energy=typeof p.energyCap==="number" ? p.energyCap : 2;
   const el=qs("subtitle");
   if(!el) return;
-  if(hasCompletedOnboarding(p)) el.textContent=`Ton : ${tone} • Énergie max : ${energy}`;
-  else el.textContent="Une citation courte, au bon niveau d’énergie.";
+  if(hasCompletedOnboarding(p)) el.textContent="Trouve ta citation du jour.";
+  else el.textContent="Une citation adaptée à ton état du moment.";
 }
 
 function setQuestionFlowVisible(yes){
@@ -202,9 +200,7 @@ function ctxFromUI(){
     mood: qs("mood").value||null,
     questionLabel: qs("questionLabel")?.value||null,
     questionText: qs("questionText")?.value||null,
-    freeText: qs("optionalUserText")?.value?.trim() || null,
-    tonePref: prefs.tonePref||null,
-    energyCap: String(prefs.energyCap||3)
+    freeText: qs("optionalUserText")?.value?.trim() || null
   };
 }
 
@@ -225,8 +221,6 @@ function clearSelectedByDataAttr(attrName){
 
 function syncPrefsIntoSettings(){
   const p=getJ(STORAGE.prefs);
-  qs("setTone").value=p.tonePref||"";
-  qs("setEnergy").value=String(p.energyCap||2);
   const mode = getMode(p);
   qs("setMode").value=mode;
   
@@ -363,8 +357,6 @@ async function handleOpenAIMode(ctx, freeTextQuery = null){
     mood: ctx.mood,
     questionLabel: ctx.questionLabel,
     questionText: ctx.questionText,
-    tonePref: ctx.tonePref,
-    energyCap: ctx.energyCap,
     freeText: freeTextQuery
   };
 
@@ -466,10 +458,7 @@ function renderOpenAIResult(result, ctx){
     detailsHtml += `
       <div>
         <div class="muted" style="margin-bottom:8px;"><b>🎯 Contexte :</b></div>
-        <div style="display:flex; flex-wrap:wrap; gap:6px;">
-          ${ctx.tonePref ? `<span class="pill" style="font-size:11px;">ton: ${ctx.tonePref}</span>` : ''}
-          ${ctx.energyCap ? `<span class="pill" style="font-size:11px;">énergie max: ${ctx.energyCap}</span>` : ''}
-        </div>
+        <div class="muted" style="font-size:11px;">Citation générée selon tes besoins du moment.</div>
       </div>
     `;
   }
@@ -585,8 +574,6 @@ function renderRAGResults(results, ctx, query){
 (async function init(){
   // Init prefs defaults (sans déclencher l'onboarding comme "fait")
   const prefs=getJ(STORAGE.prefs);
-  if(typeof prefs.energyCap!=="number") prefs.energyCap=2;
-  if(typeof prefs.tonePref!=="string") prefs.tonePref="";
   setJ(STORAGE.prefs,prefs);
   updateSubtitle();
 
@@ -628,15 +615,8 @@ function renderRAGResults(results, ctx, query){
 
   // Onboarding
   on("btnFinishOnboarding","click",()=>{
-    const tone=qs("obTone").value||"";
-    const energy=parseInt(qs("obEnergy").value||"2",10);
-    if(!tone){
-      alert("Choisis un ton pour continuer.");
-      return;
-    }
     const p=getJ(STORAGE.prefs);
-    p.tonePref=tone;
-    p.energyCap=clamp(energy,1,3);
+    p.onboarded = true;
     setJ(STORAGE.prefs,p);
     updateSubtitle();
 
@@ -647,15 +627,8 @@ function renderRAGResults(results, ctx, query){
 
   // Save settings
   on("btnSaveSettings","click",()=>{
-    const tone=qs("setTone").value||"";
-    const energy=parseInt(qs("setEnergy").value||"2",10);
     const mode=qs("setMode").value||"regles";
     const apiKey=qs("setApiKey")?.value?.trim();
-    
-    if(!tone){
-      alert("Choisis un ton.");
-      return;
-    }
     
     // Sauvegarder la clé API si elle est fournie
     if(apiKey && apiKey.length > 0){
@@ -668,8 +641,6 @@ function renderRAGResults(results, ctx, query){
     }
     
     const p=getJ(STORAGE.prefs);
-    p.tonePref=tone;
-    p.energyCap=clamp(energy,1,3);
     p.mode=mode;
     setJ(STORAGE.prefs,p);
     updateSubtitle();
@@ -804,8 +775,6 @@ function renderRAGResults(results, ctx, query){
     }
 
     const ctx = ctxFromUI();
-    ctx.tonePref = p.tonePref || "";
-    ctx.energyCap = String(p.energyCap || 3);
 
     const mode = getMode(p);
 

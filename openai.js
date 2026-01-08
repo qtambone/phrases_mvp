@@ -115,11 +115,7 @@ export async function generateQuote(context, seenQuotes = []) {
       metadata: {
         source: 'openai',
         model: 'gpt-4o-mini',
-        generatedAt: new Date().toISOString(),
-        context: {
-          tone: context.tonePref,
-          energy: context.energyCap
-        }
+        generatedAt: new Date().toISOString()
       }
     };
   } catch (error) {
@@ -158,21 +154,12 @@ function buildPrompt(context, seenQuotes) {
   const freeText = (context.freeText || '').trim();
   const synthesized = buildSearchQuery({ questionLabel: label, questionText: question });
 
-  const toneDescriptions = {
-    accompagnant: 'doux et accompagnant',
-    neutre: 'neutre et simple',
-    direct: 'direct et franc',
-    stoïque: 'stoïque et posé',
-    poétique: 'poétique et imagé'
-  };
-
   let prompt = '';
 
   // Contexte
   prompt += `Contexte utilisateur:\n`;
   if (question) prompt += `- Question: ${question}\n`;
-  if (label) prompt += `- Sélection: ${label}\n`;
-  if (synthesized) prompt += `- Intention: ${synthesized}\n`;
+  if (label) prompt += `- Réponse: ${label}\n`;
   if (freeText) prompt += `- Texte libre: "${freeText}"\n`;
 
   // Objectif
@@ -180,12 +167,6 @@ function buildPrompt(context, seenQuotes) {
 
   // Contraintes
   const constraints = [];
-  if (context.tonePref && toneDescriptions[context.tonePref]) {
-    constraints.push(`Ton souhaité: ${toneDescriptions[context.tonePref]}`);
-  }
-  if (context.energyCap) {
-    constraints.push(`Énergie max: ${context.energyCap} (respecter ce garde-fou)`);
-  }
   constraints.push('Sans injonctions ni culpabilisation');
   if (constraints.length > 0) {
     prompt += `\nContraintes:\n- ${constraints.join('\n- ')}\n`;

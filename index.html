@@ -161,35 +161,11 @@
 
     <!-- Onboarding (1ère visite) -->
     <div class="card" id="onboardingScreen" style="display:none;">
-      <h2>Choisis ton style</h2>
-      <div class="muted">On s’en sert pour te proposer des citations qui te conviennent. Tu pourras modifier plus tard dans les paramètres.</div>
+      <h2>Bienvenue !</h2>
+      <div class="muted">Nous allons te proposer des citations adaptées à ton état du moment.</div>
 
-      <div class="row" style="margin-top:12px;">
-        <div>
-          <label for="obTone">Ton préféré</label>
-          <select id="obTone">
-            <option value="">—</option>
-            <option value="accompagnant">Accompagnant (doux)</option>
-            <option value="neutre">Neutre (simple)</option>
-            <option value="direct">Direct (franc)</option>
-            <option value="stoïque">Stoïque (posé)</option>
-            <option value="poétique">Poétique (imagé)</option>
-          </select>
-          <div class="muted">Le “ton” = la manière dont la phrase te parle.</div>
-        </div>
-        <div>
-          <label for="obEnergy">Énergie max</label>
-          <select id="obEnergy">
-            <option value="1">1 (très doux)</option>
-            <option value="2" selected>2 (équilibré)</option>
-            <option value="3">3 (tout)</option>
-          </select>
-          <div class="muted">C’est un <b>garde-fou</b> : si ton énergie max est 1, on évite les citations “coup de boost”. Si elle est 3, tout est possible.</div>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="primary" id="btnFinishOnboarding">Continuer</button>
+      <div class="actions" style="margin-top:20px;">
+        <button class="primary" id="btnFinishOnboarding">Commencer</button>
       </div>
     </div>
 
@@ -516,34 +492,16 @@
   </div>
 
   <!-- Paramètres -->
+  <!-- Paramètres -->
   <div id="settingsOverlay" class="overlay hidden"></div>
   <div id="settingsPanel" class="panel hidden" role="dialog" aria-modal="true" aria-label="Paramètres">
     <div class="grid2">
       <h2 style="margin:0;">Paramètres</h2>
       <button class="small link" id="btnCloseSettings">Fermer</button>
     </div>
-    <div class="muted" style="margin-top:8px;">Ici, tu peux modifier ton ton préféré et ton énergie max.</div>
+    <div class="muted" style="margin-top:8px;">Configure le mode de recherche de citations.</div>
     <div class="row" style="margin-top:12px;">
       <div>
-        <label for="setTone">Ton préféré</label>
-        <select id="setTone">
-          <option value="">—</option>
-          <option value="accompagnant">Accompagnant (doux)</option>
-          <option value="neutre">Neutre (simple)</option>
-          <option value="direct">Direct (franc)</option>
-          <option value="stoïque">Stoïque (posé)</option>
-          <option value="poétique">Poétique (imagé)</option>
-        </select>
-      </div>
-      <div>
-        <label for="setEnergy">Énergie max</label>
-        <select id="setEnergy">
-          <option value="1">1 (très doux)</option>
-          <option value="2">2 (équilibré)</option>
-          <option value="3">3 (tout)</option>
-        </select>
-        <div class="muted">Garde-fou : limite l’intensité des citations. 1 = très soft, 2 = modéré, 3 = sans limite.</div>
-      </div>      <div>
         <label for="setMode">Mode de recherche</label>
         <select id="setMode">
           <option value="regles">Règles (moteur classique)</option>
@@ -551,7 +509,8 @@
           <option value="openai">OpenAI (génération IA)</option>
         </select>
         <div class="muted">Règles = moteur existant. RAG = recherche sémantique. OpenAI = génération de citations uniques.</div>
-      </div>    </div>
+      </div>
+    </div>
     
     <!-- Configuration OpenAI -->
     <div id="openaiConfig" style="display:none; margin-top:14px; padding:14px; background:#0c0e14; border:1px solid #2a3145; border-radius:12px;">
@@ -559,9 +518,9 @@
       <label for="setApiKey" style="font-size:12px;">Clé API OpenAI</label>
       <input type="password" id="setApiKey" placeholder="sk-..." style="width:100%; padding:10px 12px; margin-top:6px; border-radius:12px; border:1px solid #2a3145; background:#0c0e14; color:#eaf0ff; font-family:inherit; font-size:13px; outline:none;" />
       <div class="muted" style="margin-top:6px; font-size:11px;">Obtiens ta clé sur <a href="https://platform.openai.com/api-keys" target="_blank" style="color:#1b3cff;">platform.openai.com</a>. Elle reste stockée localement dans ton navigateur.</div>
-    </div>
-    <div class="actions">
-      <button class="primary" id="btnSaveSettings">Enregistrer</button>
+      <div class="actions" style="margin-top:12px;">
+        <button class="primary" id="btnSaveSettings">Enregistrer la clé</button>
+      </div>
     </div>
   </div>
 
