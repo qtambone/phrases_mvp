@@ -200,10 +200,9 @@ function ctxFromUI(){
   return {
     need: qs("need").value||null,
     mood: qs("mood").value||null,
-    needLabel: qs("needLabel")?.value||null,
-    moodLabel: qs("moodLabel")?.value||null,
-    needQuestion: qs("needQuestion")?.value||null,
-    moodQuestion: qs("moodQuestion")?.value||null,
+    questionLabel: qs("questionLabel")?.value||null,
+    questionText: qs("questionText")?.value||null,
+    freeText: qs("optionalUserText")?.value?.trim() || null,
     tonePref: prefs.tonePref||null,
     energyCap: String(prefs.energyCap||3)
   };
@@ -306,23 +305,15 @@ async function handleRAGMode(ctx, freeTextQuery = null){
     return;
   }
 
-  // Si freeTextQuery est fourni, l'utiliser directement comme query
-  let query;
-  if(freeTextQuery){
-    query = freeTextQuery;
-  } else {
-    // Sinon, construire la requête sémantique à partir du besoin et de l'humeur
-    query = RAG.buildSearchQuery({
-      need: ctx.need, 
-      mood: ctx.mood,
-      needLabel: ctx.needLabel,
-      moodLabel: ctx.moodLabel,
-      needQuestion: ctx.needQuestion,
-      moodQuestion: ctx.moodQuestion,
-      tonePref: ctx.tonePref,
-      energyCap: ctx.energyCap
-    });
-  }
+  // Construire la requête sémantique et y ajouter le texte libre s'il existe
+  const baseQuery = RAG.buildSearchQuery({
+    questionLabel: ctx.questionLabel,
+    questionText: ctx.questionText,
+    tonePref: ctx.tonePref,
+    energyCap: ctx.energyCap
+  }) || '';
+  const extra = (freeTextQuery && freeTextQuery.trim()) || '';
+  const query = [baseQuery, extra].filter(Boolean).join("\n");
   
   // Récupérer les IDs des citations déjà vues (30 derniers)
   const seenIds = getSeenIds().slice(-30);
@@ -347,12 +338,31 @@ async function handleOpenAIMode(ctx, freeTextQuery = null){
     return;
   }
 
+  // Fallback: si questionLabel/questionText manquent, tenter de les déduire de l'UI
+  if(!(ctx.questionLabel && ctx.questionLabel.trim()) || !(ctx.questionText && ctx.questionText.trim())){
+    const visibleVariant = document.querySelector('.question-variant:not(.hidden), .need-variant:not(.hidden), .mood-variant:not(.hidden)');
+    if(visibleVariant){
+      const selectedLabelEl = visibleVariant.querySelector('.selected .label') || visibleVariant.querySelector('.label');
+      const h1 = visibleVariant.querySelector('h1');
+      if(!ctx.questionLabel && selectedLabelEl){
+        ctx.questionLabel = selectedLabelEl.textContent.trim();
+      }
+      if(!ctx.questionText && h1){
+        ctx.questionText = h1.textContent.trim();
+      }
+      const ql = qs('questionLabel');
+      const qt = qs('questionText');
+      if(ql) ql.value = ctx.questionLabel || '';
+      if(qt) qt.value = ctx.questionText || '';
+    }
+  }
+
   // Préparer le contexte pour OpenAI
   const openAIContext = {
     need: ctx.need,
     mood: ctx.mood,
-    needLabel: ctx.needLabel,
-    moodLabel: ctx.moodLabel,
+    questionLabel: ctx.questionLabel,
+    questionText: ctx.questionText,
     tonePref: ctx.tonePref,
     energyCap: ctx.energyCap,
     freeText: freeTextQuery
@@ -719,26 +729,51 @@ function renderRAGResults(results, ctx, query){
       return;
     }
     const ctx=ctxFromUI();
-    if(!ctx.need || !ctx.mood){
-      alert("Choisis d'abord un besoin, puis une humeur.");
-      return;
+    // Fallback: si les champs unifiés sont vides, essayer de les récupérer depuis le DOM (élément visible sélectionné)
+    if(!(ctx.questionLabel && ctx.questionLabel.trim()) || !(ctx.questionText && ctx.questionText.trim())){
+      const visibleVariant = document.querySelector('.question-variant:not(.hidden), .need-variant:not(.hidden), .mood-variant:not(.hidden)');
+      if(visibleVariant){
+        const selectedLabelEl = visibleVariant.querySelector('.selected .label') || visibleVariant.querySelector('.label');
+        const h1 = visibleVariant.querySelector('h1');
+        if(!ctx.questionLabel && selectedLabelEl){
+          ctx.questionLabel = selectedLabelEl.textContent.trim();
+        }
+        if(!ctx.questionText && h1){
+          ctx.questionText = h1.textContent.trim();
+        }
+        // Miroir: pousser dans les inputs cachés
+        const ql = qs('questionLabel');
+        const qt = qs('questionText');
+        if(ql) ql.value = ctx.questionLabel || '';
+        if(qt) qt.value = ctx.questionText || '';
+      }
     }
-
     const mode = getMode(p);
+    const hasUnifiedQuestion = Boolean((ctx.questionLabel && ctx.questionLabel.trim()) || (ctx.questionText && ctx.questionText.trim()));
     
-    // Mode OpenAI: génération IA
+    // Mode OpenAI: génération IA (ajouter texte libre optionnel)
     if(mode === 'openai'){
-      await handleOpenAIMode(ctx);
+      await handleOpenAIMode(ctx, ctx.freeText || null);
       return;
     }
     
     // Mode RAG: recherche sémantique
     if(mode === 'rag'){
-      await handleRAGMode(ctx);
+      await handleRAGMode(ctx, ctx.freeText || null);
       return;
     }
 
-    // Mode règles: moteur classique
+    // Mode règles: si on a la nouvelle question unifiée, on bascule vers RAG.
+    if(mode === 'regles' && hasUnifiedQuestion){
+      await handleRAGMode(ctx, ctx.freeText || null);
+      return;
+    }
+
+    // Mode règles: moteur classique (fallback legacy)
+    if(!ctx.need || !ctx.mood){
+      alert("Choisis une option ci-dessus pour continuer.");
+      return;
+    }
     if(!ensureCitationsReady()) return;
 
     const c=pick(ALL,ctx);

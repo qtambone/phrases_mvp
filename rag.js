@@ -51,68 +51,34 @@ export async function search(query, topK = 5, excludeIds = []) {
 
 /**
  * Construit une phrase de recherche à partir des filtres utilisateur.
- * @param {Object} filters - { needLabel, moodLabel, needQuestion, moodQuestion }
+ * @param {Object} filters - { questionLabel, questionText }
  * @returns {string} - Phrase optimisée pour la recherche sémantique
  */
 export function buildSearchQuery(filters) {
   const {
-    needLabel,
-    moodLabel,
-    needQuestion,
-    moodQuestion
+    questionLabel,
+    questionText
   } = filters || {};
 
   function norm(str) {
     return (str || "").trim();
   }
 
-  const need = norm(needLabel);
-  const mood = norm(moodLabel);
-  const qNeed = norm(needQuestion);
-  const qMood = norm(moodQuestion);
+  const label = norm(questionLabel);
+  const question = norm(questionText);
 
-  let needLine = "";
-  let moodLine = "";
-
-  // BESOIN - adapter selon la variante
-  if (need) {
-    // Variante "scenarios" : question contient "situations"
-    if (qNeed.toLowerCase().includes("situations")) {
-      needLine = need;
+  // Si on a un label, on l'utilise tel quel ou on l'adapte légèrement
+  if (label) {
+    // Si le label commence par "me " ou "m'" (forme verbale)
+    if (label.match(/^(m'|me )/i)) {
+      return `Une citation qui ${label}.`;
     }
-    // Variante "quick" : commence par infinitif (Me, Être, Y voir, Retrouver, Relâcher, Prendre)
-    else if (need.match(/^(Me |Être |Y voir|Retrouver|Relâcher|Prendre)/i)) {
-      needLine = need.toLowerCase();
-    }
-    // Variante "quiz" : commence par "m'" ou "me " (effet conjugué)
-    else if (need.match(/^(m'|me )/i)) {
-      needLine = `Une citation qui ${need}.`;
-    }
-    // Fallback : garder tel quel
-    else {
-      needLine = need;
-    }
+    // Sinon retourner le label tel quel
+    return label;
   }
 
-  // HUMEUR - adapter selon la variante
-  if (mood) {
-    // Variante "weather" : question contient "météo"
-    if (qMood.toLowerCase().includes("météo")) {
-      moodLine = `Mon humeur: ${mood.toLowerCase()}.`;
-    }
-    // Variante "phrase" : question contient "complète"
-    else if (qMood.toLowerCase().includes("complète")) {
-      moodLine = `Je me sens ${mood.toLowerCase()}.`;
-    }
-    // Variante "quick" : par défaut
-    else {
-      moodLine = `Je me sens ${mood.toLowerCase()}.`;
-    }
-  }
-
-  const lines = [needLine, moodLine].filter(Boolean);
-
-  return lines.join("\n");
+  // Fallback : si aucun label, retourner une phrase générique
+  return "Une citation qui pourrait m'aider.";
 }
 
 /**

@@ -13,6 +13,49 @@ const ENV_API_KEY =
   (typeof process !== 'undefined' && process.env && process.env.OPENAI_API_KEY) ||
   (typeof window !== 'undefined' && window.__OPENAI_API_KEY);
 
+// Utilitaires de gestion de la clé API exposés au module
+export function hasApiKey() {
+  try {
+    const key = (ENV_API_KEY && ENV_API_KEY.trim()) || localStorage.getItem('openai_api_key');
+    return Boolean(key && key.trim());
+  } catch {
+    return Boolean(ENV_API_KEY && ENV_API_KEY.trim());
+  }
+}
+
+export function setApiKey(apiKey) {
+  const k = (apiKey || '').trim();
+  if (!k) throw new Error('Clé API vide.');
+  // Optionnel: légère validation de format
+  if (!/^sk-[A-Za-z0-9]/.test(k)) {
+    // On accepte tout de même, mais on informe
+    console.warn('[OpenAI] Format de clé inhabituel. Assure-toi qu’elle est valide.');
+  }
+  try {
+    localStorage.setItem('openai_api_key', k);
+  } catch (e) {
+    console.error('[OpenAI] Impossible de stocker la clé API dans localStorage:', e);
+    throw new Error('Stockage local impossible.');
+  }
+}
+
+export function getApiKeyMasked() {
+  try {
+    const stored = (localStorage.getItem('openai_api_key') || '').trim();
+    const effective = stored || (ENV_API_KEY && ENV_API_KEY.trim()) || '';
+    if (!effective) return '';
+    // Masque: garder le préfixe éventuel (sk-) et les 4 derniers caractères
+    const prefix = effective.startsWith('sk-') ? 'sk-' : '';
+    const tail = effective.slice(-4);
+    return `${prefix}••••••••••••••••${tail}`;
+  } catch {
+    const effective = (ENV_API_KEY && ENV_API_KEY.trim()) || '';
+    if (!effective) return '';
+    const tail = effective.slice(-4);
+    return `••••••••••••••••${tail}`;
+  }
+}
+
 /**
  * Génère une citation personnalisée via OpenAI.
  * @param {Object} context - Contexte utilisateur (need, mood, ton, energy, freeText)
@@ -89,10 +132,13 @@ export async function generateQuote(context, seenQuotes = []) {
  * Construit le prompt système pour OpenAI.
  */
 function getSystemPrompt() {
-  return `Tu es un expert en phrases/citations. Ta mission est de créer ou d'adapter une citation courte (maximum 2 phrases) qui répond au besoin de l'utilisateur.
+  return `Tu es un expert en phrases/citations. Ta mission est de créer ou d'adapter une citation courte (maximum 2 phrases) qui répond finement au contexte utilisateur.
+
+PRIORITÉ:
+- Si un texte libre est fourni, il PRIME sur les autres indices. Utilise-le pour personnaliser la citation.
 
 RÈGLES IMPORTANTES:
-- Elle doit résonner avec l'état émotionnel et le besoin exprimé
+- La citation doit résonner avec l'état émotionnel et le besoin exprimé
 - Pas de ton moralisateur ou culpabilisant
 - Pas d'injonctions ("tu dois", "il faut")
 - Si possible, cite l'auteur de la citation (ou indique "Anonyme" si c'est une création originale)
@@ -107,27 +153,11 @@ Renvoie UNIQUEMENT la citation, suivie d'un tiret et de l'auteur sur une nouvell
  * Construit le prompt utilisateur basé sur le contexte.
  */
 function buildPrompt(context, seenQuotes) {
-  let prompt = '';
+  const label = (context.questionLabel || '').trim();
+  const question = (context.questionText || '').trim();
+  const freeText = (context.freeText || '').trim();
+  const synthesized = buildSearchQuery({ questionLabel: label, questionText: question });
 
-  // Mode texte libre (plus direct)
-  if (context.freeText) {
-    prompt = `L'utilisateur a écrit:\n"${context.freeText}"\n\n`;
-    prompt += `Trouve ou crée une citation courte qui lui parlerait en ce moment.`;
-  } 
-  // Mode classique (besoin + humeur)
-  else {
-    // Reutiliser la même fabrication de requête que le mode RAG
-    const query = buildSearchQuery({
-      needLabel: context.needLabel,
-      moodLabel: context.moodLabel,
-      needQuestion: context.needQuestion,
-      moodQuestion: context.moodQuestion,
-    });
-
-    prompt = `Indications données par l'utilisateur :\n${query}\n\n`;
-  }
-
-  // Ajouter le ton préféré si spécifié
   const toneDescriptions = {
     accompagnant: 'doux et accompagnant',
     neutre: 'neutre et simple',
@@ -136,47 +166,44 @@ function buildPrompt(context, seenQuotes) {
     poétique: 'poétique et imagé'
   };
 
+  let prompt = '';
+
+  // Contexte
+  prompt += `Contexte utilisateur:\n`;
+  if (question) prompt += `- Question: ${question}\n`;
+  if (label) prompt += `- Sélection: ${label}\n`;
+  if (synthesized) prompt += `- Intention: ${synthesized}\n`;
+  if (freeText) prompt += `- Texte libre: "${freeText}"\n`;
+
+  // Objectif
+  prompt += `\nObjectif:\n- Composer une citation courte (≤ 2 phrases) qui répond à ce contexte, en PRIORISANT le texte libre s'il est présent.\n`;
+
+  // Contraintes
+  const constraints = [];
   if (context.tonePref && toneDescriptions[context.tonePref]) {
-    prompt += `\n\nTon souhaité: ${toneDescriptions[context.tonePref]}.`;
+    constraints.push(`Ton souhaité: ${toneDescriptions[context.tonePref]}`);
+  }
+  if (context.energyCap) {
+    constraints.push(`Énergie max: ${context.energyCap} (respecter ce garde-fou)`);
+  }
+  constraints.push('Sans injonctions ni culpabilisation');
+  if (constraints.length > 0) {
+    prompt += `\nContraintes:\n- ${constraints.join('\n- ')}\n`;
   }
 
-  // Ajouter les citations déjà vues (pour éviter les répétitions)
+  // Format
+  prompt += `\nFormat attendu:\n"[Citation]"\n— [Auteur ou Anonyme]\n`;
+
+  // Éviter redites
   if (seenQuotes && seenQuotes.length > 0) {
-    const recentQuotes = seenQuotes.slice(-10); // Dernières 10 seulement
+    const recentQuotes = seenQuotes.slice(-10);
     if (recentQuotes.length > 0) {
-      prompt += `\n\nÉvite de proposer des citations similaires à celles-ci (déjà vues):\n`;
+      prompt += `\nÉvite des citations trop proches de celles déjà vues:\n`;
       recentQuotes.forEach((q, i) => {
         prompt += `${i + 1}. "${q}"\n`;
       });
     }
   }
 
-  return prompt;
-}
-
-/**
- * Vérifie si la clé API est configurée.
- */
-export function hasApiKey() {
-  const key = localStorage.getItem('openai_api_key');
-  return Boolean(key && key.trim().length > 0);
-}
-
-/**
- * Configure la clé API OpenAI.
- */
-export function setApiKey(key) {
-  if (!key || typeof key !== 'string') {
-    throw new Error('Clé API invalide');
-  }
-  localStorage.setItem('openai_api_key', key.trim());
-}
-
-/**
- * Récupère la clé API (masquée pour affichage).
- */
-export function getApiKeyMasked() {
-  const key = localStorage.getItem('openai_api_key');
-  if (!key) return '';
-  return key.slice(0, 7) + '...' + key.slice(-4);
+  return prompt.trim();
 }

@@ -221,68 +221,68 @@
         </div>
       </div>
 
-      <!-- Question variante 1 -->
-      <div class="question-variant" data-variant="q1">
+      <!-- Besoin — version rapide -->
+      <div class="need-variant" data-variant="quick">
         <h1>Qu'est-ce qui te ferait du bien en ce moment ?</h1>
-        <div class="chips">
-          <button class="chip question-choice">
+        <div class="chips" id="need-quick">
+          <button class="chip need-chip" data-need="calme">
             <span class="emoji">🌿</span><span class="label">Un peu de calme, me reposer</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="réconfort">
             <span class="emoji">🤍</span><span class="label">Être écouté·e</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="clarté">
             <span class="emoji">🔍</span><span class="label">Y voir plus clair</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="élan">
             <span class="emoji">⚡</span><span class="label">Gagner en motivation</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="lâcher-prise">
             <span class="emoji">🌬️</span><span class="label">Relâcher ou ralentir un peu</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="optimisme">
             <span class="emoji">🌈</span><span class="label">Voir le positif</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="perspective">
             <span class="emoji">🔭</span><span class="label">Prendre du recul</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="sourire">
             <span class="emoji">😄</span><span class="label">Sourire ou rigoler davantage</span>
           </button>
-          <button class="chip question-choice">
-            <span class="emoji">💪</span><span class="label">Retrouver ou prendre confiance</span>
+          <button class="chip need-chip" data-need="perspective">
+            <span class="emoji">🔭</span><span class="label">Retrouver ou prendre confiance</span>
           </button>
-          <button class="chip question-choice">
+          <button class="chip need-chip" data-need="fierté">
             <span class="emoji">🏆</span><span class="label">Être fier·e de moi</span>
           </button>
         </div>
       </div>
 
-      <!-- Question variante 2 -->
-      <div class="question-variant" data-variant="q2">
+      <!-- Besoin — scénarios -->
+      <div class="need-variant" data-variant="scenarios">
         <h1>Dans laquelle de ces situations tu te reconnais le plus ?</h1>
-        <div class="cards-row">
-          <button class="card-btn question-choice">
-            <span class="emoji">🌿</span>
-            <span class="label">J’aimerais ralentir un peu et respirer.</span>
-            <span class="sub">→ Un moment de calme me ferait du bien.</span>
+        <div class="cards-row" id="need-scenarios">
+          <button class="card-btn need-card" data-need="calme">
+            <span class="emoji">🕑</span>
+            <span class="label">Ma tête tourne, j’ai trop de choses en tête.</span>
+            <span class="sub">→ J’aurais besoin de calme.</span>
           </button>
-          <button class="card-btn question-choice">
-            <span class="emoji">🤍</span>
-            <span class="label">J’ai envie de me sentir soutenu·e.</span>
-            <span class="sub">→ Un peu de réconfort.</span>
+          <button class="card-btn need-card" data-need="réconfort">
+            <span class="emoji">🤗</span>
+            <span class="label">Là maintenant, j'ai besoin de douceur.</span>
+            <span class="sub">→ J’aimerais être réconforté·e.</span>
           </button>
-          <button class="card-btn question-choice">
+          <button class="card-btn need-card" data-need="clarté">
             <span class="emoji">❓</span>
             <span class="label">Je doute, je ne sais pas trop quoi faire.</span>
-            <span class="sub">→ J’ai besoin d'y voir plus clair.</span>
+            <span class="sub">→ J’ai besoin de clarté.</span>
           </button>
-          <button class="card-btn question-choice">
+          <button class="card-btn need-card" data-need="élan">
             <span class="emoji">🚀</span>
             <span class="label">J’aurais juste besoin d’un petit coup d’élan.</span>
-            <span class="sub">→ Un peu de motivation.</span>
+            <span class="sub">→ Un peu de motivation douce.</span>
           </button>
-          <button class="card-btn question-choice">
+          <button class="card-btn need-card" data-need="lâcher-prise">
             <span class="emoji">🌊</span>
             <span class="label">Je m’accroche à quelque chose qui m’épuise.</span>
             <span class="sub">→ J’aimerais lâcher un peu prise.</span>
@@ -292,26 +292,6 @@
             <span class="label">J’aimerais voir la situation autrement.</span>
             <span class="sub">→ J’ai besoin de perspective.</span>
           </button>
-          <button class="card-btn need-card" data-need="perspective">
-            <span class="emoji">✨</span>
-            <span class="label">Je sens que quelque chose veut avancer.</span>
-            <span class="sub">→ Un petit coup de motivation.</span>
-          </button>
-          <button class="card-btn need-card" data-need="perspective">
-            <span class="emoji">🌱</span>
-            <span class="label">J’aimerais me faire davantage confiance.</span>
-            <span class="sub">→ Avancer avec plus de sérénité.</span>
-          </button>
-          <button class="card-btn need-card" data-need="perspective">
-            <span class="emoji">💡</span>
-            <span class="label">J’ai envie d’être inspiré·e.</span>
-            <span class="sub">→ Ouvrir de nouvelles idées.</span>
-          </button>
-          <button class="card-btn need-card" data-need="curiosité">
-            <span class="emoji">👀</span>
-            <span class="label">Tout va bien… j’ai juste envie de découvrir.</span>
-            <span class="sub">→ Voir quelque chose de nouveau.</span>
-          </button>
         </div>
       </div>
 
@@ -319,8 +299,8 @@
       <div class="need-variant" data-variant="quiz">
         <h1>Si une phrase devait t’aider là, elle ferait quoi ?</h1>
         <div class="chips" id="need-quiz">
-          <button class="chip need-quiz" data-need="confiance">
-            <span class="emoji">🌱</span><span class="label">me donnerait confiance</span>
+          <button class="chip need-quiz" data-need="calme">
+            <span class="emoji">🧘</span><span class="label">m’apaiserait</span>
           </button>
           <button class="chip need-quiz" data-need="réconfort">
             <span class="emoji">🤍</span><span class="label">me réconforterait</span>
@@ -328,35 +308,14 @@
           <button class="chip need-quiz" data-need="clarté">
             <span class="emoji">💡</span><span class="label">m’aiderait à comprendre</span>
           </button>
-          <button class="chip need-quiz" data-need="joie">
-            <span class="emoji">😊</span><span class="label">me ferait sourire</span>
-          </button>
           <button class="chip need-quiz" data-need="élan">
             <span class="emoji">🔥</span><span class="label">me donnerait envie d’avancer</span>
           </button>
           <button class="chip need-quiz" data-need="lâcher-prise">
             <span class="emoji">🌬️</span><span class="label">m’aiderait à relâcher</span>
           </button>
-          <button class="chip need-quiz" data-need="inspiration">
-            <span class="emoji">✨</span><span class="label">m’inspirerait</span>
-          </button>
           <button class="chip need-quiz" data-need="perspective">
             <span class="emoji">🌌</span><span class="label">m’aiderait à voir autrement</span>
-          </button>
-          <button class="chip need-quiz" data-need="surprise">
-            <span class="emoji">🎁</span><span class="label">me surprendrait</span>
-          </button>
-          <button class="chip need-quiz" data-need="motivation-fun">
-            <span class="emoji">🚀</span><span class="label">me boosterait</span>
-          </button>
-          <button class="chip need-quiz" data-need="curiosité">
-              <span class="emoji">👀</span><span class="label">piquerait ma curiosité</span>
-          </button>
-          <button class="chip need-quiz" data-need="good-vibes">
-            <span class="emoji">😎</span><span class="label">me mettrait dans une bonne vibe</span>
-          </button>
-          <button class="chip need-quiz" data-need="reset">
-            <span class="emoji">🔄</span><span class="label">me ferait un reset</span>
           </button>
         </div>
       </div>
@@ -371,88 +330,68 @@
           <button class="chip mood-chip" data-mood="bien">
             <span class="emoji">🙂</span><span class="label">Plutôt bien</span>
           </button>
-          <button class="chip mood-chip" data-mood="chill">
-            <span class="emoji">😎</span><span class="label">Chill</span>
+          <button class="chip mood-chip" data-mood="fatigué">
+            <span class="emoji">😴</span><span class="label">Épuisé·e</span>
           </button>
-          <button class="chip mood-chip" data-mood="fatigue">
-            <span class="emoji">😴</span><span class="label">Fatigué·e</span>
+          <button class="chip mood-chip" data-mood="stressé">
+            <span class="emoji">😟</span><span class="label">Tendu·e</span>
           </button>
-          <button class="chip mood-chip" data-mood="stress">
-            <span class="emoji">😟</span><span class="label">Un peu tendu·e</span>
+          <button class="chip mood-chip" data-mood="triste">
+            <span class="emoji">😔</span><span class="label">Triste</span>
           </button>
-          <button class="chip mood-chip" data-mood="calme">
-            <span class="emoji">🧘</span><span class="label">Calme</span>
+          <button class="chip mood-chip" data-mood="stressé">
+            <span class="emoji">😵‍💫</span><span class="label">Débordé·e</span>
           </button>
-          <button class="chip mood-chip" data-mood="curieux">
-            <span class="emoji">👀</span><span class="label">Curieux·se</span>
-          </button>
-          <button class="chip mood-chip" data-mood="motivé">
-            <span class="emoji">🚀</span><span class="label">Motivé·e</span>
-          </button>
-          <button class="chip mood-chip" data-mood="vide">
+          <button class="chip mood-chip" data-mood="neutre">
             <span class="emoji">😐</span><span class="label">Un peu vide</span>
-          </button>
-          <button class="chip mood-chip" data-mood="joyeux">
-            <span class="emoji">😊</span><span class="label">De bonne humeur</span>
-          </button>
-          <button class="chip mood-chip" data-mood="indecis">
-            <span class="emoji">🤔</span><span class="label">Je sais pas trop</span>
           </button>
         </div>
       </div>
 
       <!-- Humeur — météo -->
       <div class="mood-variant" data-variant="weather">
-        <h1>Ton mood du moment, il ressemble à quoi ?</h1>
+        <h1>Si ton humeur était une météo aujourd’hui, ce serait ?</h1>
         <div class="chips" id="mood-weather">
-          <button class="chip mood-weather" data-mood="lumineux">
-            <span class="emoji">🌞</span><span class="label">Lumineux</span>
+          <button class="chip mood-weather" data-mood="bien">
+            <span class="emoji">🌞</span><span class="label">Clair</span>
           </button>
-          <button class="chip mood-weather" data-mood="léger">
-            <span class="emoji">🌤️</span><span class="label">Plutôt léger</span>
+          <button class="chip mood-weather" data-mood="neutre">
+            <span class="emoji">🌤️</span><span class="label">Éclaircies</span>
           </button>
-          <button class="chip mood-weather" data-mood="calme">
-            <span class="emoji">🌿</span><span class="label">Calme</span>
+          <button class="chip mood-weather" data-mood="triste">
+            <span class="emoji">🌧️</span><span class="label">Pluie fine</span>
           </button>
-          <button class="chip mood-weather" data-mood="flottant">
-            <span class="emoji">☁️</span><span class="label">Un peu flottant</span>
-          </button>
-          <button class="chip mood-weather" data-mood="chargé">
-            <span class="emoji">🌫️</span><span class="label">Chargé</span>
-          </button>
-          <button class="chip mood-weather" data-mood="intense">
-            <span class="emoji">⛈️</span><span class="label">Intense</span>
+          <button class="chip mood-weather" data-mood="stressé">
+            <span class="emoji">⛈️</span><span class="label">Gros nuages</span>
           </button>
           <button class="chip mood-weather" data-mood="fatigué">
-            <span class="emoji">🌙</span><span class="label">Fatigué·e</span>
+            <span class="emoji">☁️</span><span class="label">Ciel gris</span>
           </button>
-          <button class="chip mood-weather" data-mood="curieux">
-            <span class="emoji">👀</span><span class="label">Curieux·se</span>
-          </button>
-          <button class="chip mood-weather" data-mood="énergique">
-            <span class="emoji">⚡</span><span class="label">Énergique</span>
-          </button>
-          <button class="chip mood-weather" data-mood="mystérieux">
-            <span class="emoji">🌌</span><span class="label">Un peu mystérieux</span>
+          <button class="chip mood-weather" data-mood="motivé">
+            <span class="emoji">🌈</span><span class="label">Énergisé·e</span>
           </button>
         </div>
       </div>
 
-      <!-- Humeur — phrase (saisie libre + suggestions) -->
+      <!-- Humeur — phrase -->
       <div class="mood-variant" data-variant="phrase">
         <h1>Complète la phrase suivante : “En ce moment, je me sens…”</h1>
-        <div style="margin-top:8px;">
-          <input type="text" id="moodPhraseInput" placeholder="ex: épuisé·e, tendu·e, plutôt neutre…" style="width:100%; padding:10px 12px; border-radius:12px; border:1px solid #2a3145; background:#0c0e14; color:#eaf0ff; font-size:14px; outline:none;" />
-        </div>
-        <div class="text-suggestions" id="mood-phrase" style="margin-top:12px;">
-          <span class="label">📝 Des idées pour continuer :</span>
-          <div>
-            <span class="suggestion-chip" data-suggestion="épuisé·e">épuisé·e</span>
-            <span class="suggestion-chip" data-suggestion="tendu·e">tendu·e</span>
-            <span class="suggestion-chip" data-suggestion="triste">triste</span>
-            <span class="suggestion-chip" data-suggestion="plutôt neutre">plutôt neutre</span>
-            <span class="suggestion-chip" data-suggestion="plein·e d’énergie">plein·e d’énergie</span>
-          </div>
+        <div class="chips" id="mood-phrase">
+          <button class="chip mood-phrase" data-mood="fatigué">
+            <span class="emoji">😴</span><span class="label">épuisé·e</span>
+          </button>
+          <button class="chip mood-phrase" data-mood="stressé">
+            <span class="emoji">😟</span><span class="label">tendu·e</span>
+          </button>
+          <button class="chip mood-phrase" data-mood="triste">
+            <span class="emoji">😔</span><span class="label">triste</span>
+          </button>
+          <button class="chip mood-phrase" data-mood="neutre">
+            <span class="emoji">😐</span><span class="label">plutôt neutre</span>
+          </button>
+          <button class="chip mood-phrase" data-mood="motivé">
+            <span class="emoji">💪</span><span class="label">plein·e d’énergie</span>
+          </button>
         </div>
       </div>
 
@@ -483,18 +422,14 @@
           <option value="motivé">Motivé</option>
         </select>
 
-        <!-- Labels textuels pour le mode RAG/OpenAI -->
-        <input type="hidden" id="questionLabel" value="">
-        <input type="hidden" id="questionText" value="">
+        <!-- Labels textuels pour le mode RAG -->
+        <input type="hidden" id="needLabel" value="">
+        <input type="hidden" id="moodLabel" value="">
+        <input type="hidden" id="needQuestion" value="">
+        <input type="hidden" id="moodQuestion" value="">
       </div>
 
-      <!-- Texte libre optionnel après sélection -->
-      <div id="optionalTextSection" class="card" style="display:none; margin-top:12px;">
-        <div class="muted" id="optionalTextLabel" style="margin-bottom:6px;">Tu veux préciser quelque chose ? (optionnel)</div>
-        <textarea id="optionalUserText" placeholder="Écris librement ce qui te vient..." style="min-height: 80px;"></textarea>
-      </div>
-
-      <div class="actions" id="quoteActionRow" style="margin-top:12px; display:none;">
+      <div class="actions" id="quoteActionRow" style="margin-top:16px; display:none;">
         <button class="primary" id="btnGetQuote">Voir ma citation</button>
       </div>
 
@@ -567,7 +502,7 @@
 
   <script type="module" src="app.js"></script>
   <script>
-    // Sélection aléatoire d'UNE SEULE question (fusion besoin + humeur)
+    // Sélection aléatoire d'une seule variante besoin + humeur
     (function(){
       function pickRandomVariant(selector){
         const blocks = Array.from(document.querySelectorAll(selector));
@@ -586,7 +521,12 @@
         });
       }
 
+      function clearGroup(selector) {
+        document.querySelectorAll(selector).forEach(el => el.classList.remove("selected"));
+      }
+
       function shouldUseFreeText() {
+        // Vérifie le mode sauvegardé
         try {
           const prefs = JSON.parse(localStorage.getItem("mvp_prefs_v1") || "{}");
           // 50% du temps en mode RAG ou OpenAI
@@ -596,135 +536,102 @@
         }
       }
 
-      function setupQuestionUI() {
+      function setupNeedAndMoodUI() {
+        // Décider aléatoirement si on affiche le flow texte libre ou classique (pour RAG et OpenAI)
         const useFreeText = shouldUseFreeText();
         
         const ragFreeTextFlow = document.getElementById("ragFreeTextFlow");
-        const questionVariants = document.querySelectorAll(".question-variant, .need-variant, .mood-variant");
+        const needVariants = document.querySelectorAll(".need-variant");
+        const moodStep = document.getElementById("moodStep");
         const quoteActionRow = document.getElementById("quoteActionRow");
-        const moodStepContainer = document.getElementById("moodStep");
 
         if (useFreeText) {
-          // Mode texte libre
+          // Mode texte libre (RAG ou OpenAI)
           if (ragFreeTextFlow) ragFreeTextFlow.classList.add("active");
-          questionVariants.forEach(v => v.style.display = "none");
+          needVariants.forEach(v => v.style.display = "none");
+          if (moodStep) moodStep.style.display = "none";
           if (quoteActionRow) quoteActionRow.style.display = "none";
         } else {
-          // Mode classique: une SEULE question aléatoire
+          // Mode classique: choix besoin + humeur
           if (ragFreeTextFlow) ragFreeTextFlow.classList.remove("active");
+          needVariants.forEach(v => v.style.display = "block");
           
-          // Afficher toutes les variantes puis en choisir une seule
-          if (moodStepContainer) moodStepContainer.style.display = "block"; // déplier si on choisit une variante d'humeur
-          questionVariants.forEach(v => v.style.display = "block");
-          pickRandomVariant(".question-variant, .need-variant, .mood-variant");
+          // Choisir une variante de besoin et une variante d'humeur à chaque ouverture
+          pickRandomVariant(".need-variant");
+          pickRandomVariant(".mood-variant");
         }
 
-        // Gestionnaires pour tous les choix de questions
-        document.querySelectorAll(".question-choice, .need-chip, .need-card, .need-quiz, .mood-chip, .mood-weather, .mood-phrase").forEach(btn => {
+        const needSelect = document.getElementById("need");
+        const moodSelect = document.getElementById("mood");
+
+        document.querySelectorAll(".need-chip, .need-card, .need-quiz").forEach(btn => {
           btn.addEventListener("click", () => {
-            // Sélection visuelle
-            const parentVariant = btn.closest(".question-variant, .need-variant, .mood-variant");
-            if (parentVariant) {
-              const allChoices = parentVariant.querySelectorAll(".question-choice, .need-chip, .need-card, .need-quiz, .mood-chip, .mood-weather, .mood-phrase");
-              allChoices.forEach(c => c.classList.remove("selected"));
-            }
-            btn.classList.add("selected");
+            const v = btn.getAttribute("data-need") || "";
+            if (needSelect) needSelect.value = v;
+            if (btn.classList.contains("need-chip")) selectGroup(".need-chip", btn);
+            if (btn.classList.contains("need-card")) selectGroup(".need-card", btn);
+            if (btn.classList.contains("need-quiz")) selectGroup(".need-quiz", btn);
 
-            // Stocker le label et la question
+            // Stocker le label textuel pour le RAG
             const labelEl = btn.querySelector(".label");
-            const questionLabelInput = document.getElementById("questionLabel");
-            const questionTextInput = document.getElementById("questionText");
-            
-            if (questionLabelInput && labelEl) {
-              questionLabelInput.value = labelEl.textContent.trim();
+            const needLabelInput = document.getElementById("needLabel");
+            const needQuestionInput = document.getElementById("needQuestion");
+            if (needLabelInput && labelEl) {
+              needLabelInput.value = labelEl.textContent.trim();
             }
-            
-            const questionH1 = btn.closest(".question-variant, .need-variant, .mood-variant")?.querySelector("h1");
-            if (questionTextInput && questionH1) {
-              questionTextInput.value = questionH1.textContent.trim();
+            // Stocker aussi la question
+            const questionH1 = btn.closest(".need-variant").querySelector("h1");
+            if (needQuestionInput && questionH1) {
+              needQuestionInput.value = questionH1.textContent.trim();
             }
 
-            // Afficher immédiatement le bouton "Voir ma citation"
-            if (quoteActionRow) quoteActionRow.style.display = "flex";
-            // Afficher la zone de texte optionnelle
-            const optionalTextSection = document.getElementById("optionalTextSection");
-            if (optionalTextSection) {
-              optionalTextSection.style.display = "block";
-              const optionalTextLabel = document.getElementById("optionalTextLabel");
-              if (optionalTextLabel) {
-                const variants = [
-                  "Envie de dire quelque chose ?",
-                  "Quelque chose à partager ?",
-                  "Tu veux préciser un peu ?",
-                  "Un détail à ajouter ?",
-                  "Une idée ou un ressenti à écrire ?"
-                ];
-                const chosen = variants[Math.floor(Math.random() * variants.length)];
-                optionalTextLabel.textContent = `${chosen} (optionnel)`;
-              }
-            }
-            
+            // Flow: après le besoin, on affiche l'étape humeur et on réinitialise l'humeur.
+            if (moodStep) moodStep.style.display = "block";
+            if (moodSelect) moodSelect.value = "";
+            clearGroup(".mood-chip");
+            clearGroup(".mood-weather");
+            clearGroup(".mood-phrase");
+            if (quoteActionRow) quoteActionRow.style.display = "none";
+
+            // Relancer le tirage aléatoire pour la variante d'humeur
+            pickRandomVariant(".mood-variant");
+
             if (typeof window.resetQuoteUI === "function") window.resetQuoteUI();
           });
         });
 
-        // Humeur — phrase: activer le flux sur saisie libre
-        const moodPhraseInput = document.getElementById("moodPhraseInput");
-        if (moodPhraseInput) {
-          const triggerFromInput = () => {
-            const val = moodPhraseInput.value.trim();
-            if (!val) return;
-            const parentVariant = moodPhraseInput.closest(".mood-variant");
-            const questionLabelInput = document.getElementById("questionLabel");
-            const questionTextInput = document.getElementById("questionText");
-
-            if (questionLabelInput) questionLabelInput.value = val;
-            const h1 = parentVariant?.querySelector("h1");
-            if (questionTextInput && h1) questionTextInput.value = h1.textContent.trim();
-
-            // Afficher le bouton et la zone de texte optionnelle
-            const quoteActionRow = document.getElementById("quoteActionRow");
-            if (quoteActionRow) quoteActionRow.style.display = "flex";
-            const optionalTextSection = document.getElementById("optionalTextSection");
-            if (optionalTextSection) {
-              optionalTextSection.style.display = "block";
-              const optionalTextLabel = document.getElementById("optionalTextLabel");
-              if (optionalTextLabel) {
-                const variants = [
-                  "Envie de dire quelque chose ?",
-                  "Quelque chose à partager ?",
-                  "Tu veux préciser un peu ?",
-                  "Un détail à ajouter ?",
-                  "Une idée ou un ressenti à écrire ?"
-                ];
-                const chosen = variants[Math.floor(Math.random() * variants.length)];
-                optionalTextLabel.textContent = `${chosen} (optionnel)`;
-              }
-            }
-
-            if (typeof window.resetQuoteUI === "function") window.resetQuoteUI();
-          };
-          moodPhraseInput.addEventListener("input", triggerFromInput);
-        }
-
-        // Suggestions: remplir la saisie et déclencher
-        document.querySelectorAll("#mood-phrase .suggestion-chip").forEach(btn => {
+        document.querySelectorAll(".mood-chip, .mood-weather, .mood-phrase").forEach(btn => {
           btn.addEventListener("click", () => {
-            const suggestion = btn.getAttribute("data-suggestion") || btn.textContent.trim();
-            const input = document.getElementById("moodPhraseInput");
-            if (input) {
-              input.value = suggestion;
-              input.focus();
-              input.dispatchEvent(new Event("input"));
+            const v = btn.getAttribute("data-mood") || "";
+            if (moodSelect) moodSelect.value = v;
+            if (btn.classList.contains("mood-chip")) selectGroup(".mood-chip", btn);
+            if (btn.classList.contains("mood-weather")) selectGroup(".mood-weather", btn);
+            if (btn.classList.contains("mood-phrase")) selectGroup(".mood-phrase", btn);
+
+            // Stocker le label textuel pour le RAG
+            const labelEl = btn.querySelector(".label");
+            const moodLabelInput = document.getElementById("moodLabel");
+            const moodQuestionInput = document.getElementById("moodQuestion");
+            if (moodLabelInput && labelEl) {
+              moodLabelInput.value = labelEl.textContent.trim();
             }
+            // Stocker aussi la question
+            const questionH1 = btn.closest(".mood-variant").querySelector("h1");
+            if (moodQuestionInput && questionH1) {
+              moodQuestionInput.value = questionH1.textContent.trim();
+            }
+
+            // Une fois l'humeur choisie, on peut proposer le bouton "Voir ma citation".
+            if (quoteActionRow) quoteActionRow.style.display = "flex";
+            if (typeof window.resetQuoteUI === "function") window.resetQuoteUI();
           });
         });
       }
 
       if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", setupQuestionUI);
+        document.addEventListener("DOMContentLoaded", setupNeedAndMoodUI);
       } else {
-        setupQuestionUI();
+        setupNeedAndMoodUI();
       }
     })();
   </script>
