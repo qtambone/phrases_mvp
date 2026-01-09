@@ -76,6 +76,10 @@ function showClassicQuestionFlow(yes){
   });
 }
 
+function isFreeTextMode(){
+  return Boolean(document.getElementById("ragFreeTextFlow")?.classList.contains("active"));
+}
+
 function resetQuoteUI(){
   if(qs("quoteBox")) qs("quoteBox").style.display="none";
   if(qs("feedbackRow")) qs("feedbackRow").style.display="none";
@@ -333,7 +337,7 @@ async function handleOpenAIMode(ctx, freeTextQuery = null){
   }
 
   // Fallback: si questionLabel/questionText manquent, tenter de les déduire de l'UI
-  if(!(ctx.questionLabel && ctx.questionLabel.trim()) || !(ctx.questionText && ctx.questionText.trim())){
+  if(!isFreeTextMode() && (!(ctx.questionLabel && ctx.questionLabel.trim()) || !(ctx.questionText && ctx.questionText.trim()))){
     const visibleVariant = document.querySelector('.question-variant:not(.hidden), .need-variant:not(.hidden), .mood-variant:not(.hidden)');
     if(visibleVariant){
       const selectedLabelEl = visibleVariant.querySelector('.selected .label') || visibleVariant.querySelector('.label');
@@ -627,11 +631,11 @@ function renderRAGResults(results, ctx, query){
 
   // Save settings
   on("btnSaveSettings","click",()=>{
-    const mode=qs("setMode").value||"regles";
+    const mode=qs("setMode").value||"rag";
     const apiKey=qs("setApiKey")?.value?.trim();
     
-    // Sauvegarder la clé API si elle est fournie
-    if(apiKey && apiKey.length > 0){
+    // Sauvegarder la clé API uniquement si on est en mode OpenAI et qu'une clé est fournie
+    if(mode === "openai" && apiKey && apiKey.length > 0){
       try {
         OpenAI.setApiKey(apiKey);
       } catch(err) {
@@ -699,9 +703,16 @@ function renderRAGResults(results, ctx, query){
       qs("btnOpenSettings").style.visibility="hidden";
       return;
     }
+    // Nettoyer les inputs question/réponse AVANT de lire le contexte si on est en mode free-text
+    if(isFreeTextMode()){
+      const ql = qs('questionLabel');
+      const qt = qs('questionText');
+      if(ql) ql.value = '';
+      if(qt) qt.value = '';
+    }
     const ctx=ctxFromUI();
     // Fallback: si les champs unifiés sont vides, essayer de les récupérer depuis le DOM (élément visible sélectionné)
-    if(!(ctx.questionLabel && ctx.questionLabel.trim()) || !(ctx.questionText && ctx.questionText.trim())){
+    if(!isFreeTextMode() && (!(ctx.questionLabel && ctx.questionLabel.trim()) || !(ctx.questionText && ctx.questionText.trim()))){
       const visibleVariant = document.querySelector('.question-variant:not(.hidden), .need-variant:not(.hidden), .mood-variant:not(.hidden)');
       if(visibleVariant){
         const selectedLabelEl = visibleVariant.querySelector('.selected .label') || visibleVariant.querySelector('.label');
@@ -774,6 +785,13 @@ function renderRAGResults(results, ctx, query){
       return;
     }
 
+    // Nettoyer les inputs question/réponse AVANT de lire le contexte en mode free-text
+    if(isFreeTextMode()){
+      const ql = qs('questionLabel');
+      const qt = qs('questionText');
+      if(ql) ql.value = '';
+      if(qt) qt.value = '';
+    }
     const ctx = ctxFromUI();
 
     const mode = getMode(p);

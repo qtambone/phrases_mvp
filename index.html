@@ -504,11 +504,10 @@
       <div>
         <label for="setMode">Mode de recherche</label>
         <select id="setMode">
-          <option value="regles">Règles (moteur classique)</option>
           <option value="rag">RAG (recherche sémantique)</option>
           <option value="openai">OpenAI (génération IA)</option>
         </select>
-        <div class="muted">Règles = moteur existant. RAG = recherche sémantique. OpenAI = génération de citations uniques.</div>
+        <div class="muted">RAG = recherche sémantique. OpenAI = génération de citations uniques.</div>
       </div>
     </div>
     
@@ -518,9 +517,11 @@
       <label for="setApiKey" style="font-size:12px;">Clé API OpenAI</label>
       <input type="password" id="setApiKey" placeholder="sk-..." style="width:100%; padding:10px 12px; margin-top:6px; border-radius:12px; border:1px solid #2a3145; background:#0c0e14; color:#eaf0ff; font-family:inherit; font-size:13px; outline:none;" />
       <div class="muted" style="margin-top:6px; font-size:11px;">Obtiens ta clé sur <a href="https://platform.openai.com/api-keys" target="_blank" style="color:#1b3cff;">platform.openai.com</a>. Elle reste stockée localement dans ton navigateur.</div>
-      <div class="actions" style="margin-top:12px;">
-        <button class="primary" id="btnSaveSettings">Enregistrer la clé</button>
-      </div>
+    </div>
+    
+    <!-- Bouton Enregistrer (toujours visible) -->
+    <div class="actions" style="margin-top:16px;">
+      <button class="primary" id="btnSaveSettings">Enregistrer</button>
     </div>
   </div>
 
@@ -545,35 +546,44 @@
         });
       }
 
-      function shouldUseFreeText() {
-        try {
-          const prefs = JSON.parse(localStorage.getItem("mvp_prefs_v1") || "{}");
-          // 50% du temps en mode RAG ou OpenAI
-          return (prefs.mode === "rag" || prefs.mode === "openai") && Math.random() < 0.5;
-        } catch {
-          return false;
-        }
-      }
-
       function setupQuestionUI() {
-        const useFreeText = shouldUseFreeText();
-        
         const ragFreeTextFlow = document.getElementById("ragFreeTextFlow");
         const questionVariants = document.querySelectorAll(".question-variant, .need-variant, .mood-variant");
         const quoteActionRow = document.getElementById("quoteActionRow");
         const moodStepContainer = document.getElementById("moodStep");
 
-        if (useFreeText) {
-          // Mode texte libre
-          if (ragFreeTextFlow) ragFreeTextFlow.classList.add("active");
-          questionVariants.forEach(v => v.style.display = "none");
-          if (quoteActionRow) quoteActionRow.style.display = "none";
-        } else {
-          // Mode classique: une SEULE question aléatoire
-          if (ragFreeTextFlow) ragFreeTextFlow.classList.remove("active");
+        // Vérifier le mode actif
+        const prefs = JSON.parse(localStorage.getItem("mvp_prefs_v1") || "{}");
+        const mode = prefs.mode || 'regles';
+        
+        // En mode RAG ou OpenAI : inclure le free-text comme une variante parmi les autres
+        if (mode === "rag" || mode === "openai") {
+          // Construire le pool : free-text + toutes les autres variantes
+          const allVariants = [ragFreeTextFlow, ...Array.from(questionVariants)].filter(Boolean);
+          const chosen = allVariants[Math.floor(Math.random() * allVariants.length)];
           
-          // Afficher toutes les variantes puis en choisir une seule
-          if (moodStepContainer) moodStepContainer.style.display = "block"; // déplier si on choisit une variante d'humeur
+          if (chosen === ragFreeTextFlow) {
+            // Mode texte libre sélectionné
+            ragFreeTextFlow.classList.add("active");
+            questionVariants.forEach(v => v.style.display = "none");
+            if (quoteActionRow) quoteActionRow.style.display = "none";
+          } else {
+            // Une variante classique sélectionnée
+            ragFreeTextFlow.classList.remove("active");
+            if (moodStepContainer) moodStepContainer.style.display = "block";
+            questionVariants.forEach(v => {
+              if (v === chosen) {
+                v.style.display = "block";
+                v.classList.remove("hidden");
+              } else {
+                v.style.display = "none";
+              }
+            });
+          }
+        } else {
+          // Mode règles : seulement les variantes classiques
+          ragFreeTextFlow.classList.remove("active");
+          if (moodStepContainer) moodStepContainer.style.display = "block";
           questionVariants.forEach(v => v.style.display = "block");
           pickRandomVariant(".question-variant, .need-variant, .mood-variant");
         }
