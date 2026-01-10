@@ -1,2 +1,13 @@
 .env
 .env.local
+# Fichiers volumineux à ignorer
+citations.json
+2000_citations_hasard.json
+citations_nettoyee_fr.csv
+citations_sample.json
+RAG/__pycache__/
+RAG/*.pyc
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store

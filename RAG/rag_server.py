@@ -29,8 +29,8 @@ print("✅ Modèles chargés", file=sys.stderr)
 
 # Initialisation ChromaDB + indexation
 print("🔄 Indexation des citations...", file=sys.stderr)
-# Utiliser l'échantillon pour un démarrage plus rapide
-citations_path = Path(__file__).resolve().parents[1] / "citations_sample.json"
+# Utiliser le dataset demandé par l'utilisateur
+citations_path = Path(__file__).resolve().parents[1] / "2000_citations_hasard.json"
 print(f"📂 Fichier: {citations_path}", file=sys.stderr)
 with open(citations_path, 'r', encoding='utf-8') as f:
     data = json.load(f)
@@ -49,48 +49,32 @@ for idx, quote in enumerate(citations):
     quote_id = base_id if dup_index == 0 else f"{base_id}__dup{dup_index}"
     quote["id"] = quote_id
 
-# Fonction d'enrichissement avec contexte sémantique approfondi
+# Fonction d'enrichissement avec tags + contexte pour optimiser la similitude
 def create_enriched_text(quote: Dict) -> str:
-    """Enrichit le texte avec auteur, catégorie et mots-clés émotionnels pour améliorer la recherche sémantique."""
-    text = (quote.get("text") or "").strip()
-    author = (quote.get("author") or "").strip()
-    category = (quote.get("category") or "").strip()
-    
-    # Le texte de la citation est le plus important
-    parts = [text]
-    
-    # Ajouter la catégorie de manière sémantique pour améliorer la recherche
-    if category:
-        # Traduire les catégories en contexte sémantique enrichi
-        category_contexts = {
-            "Amitie": "amitié, relations, soutien social",
-            "Philosophie": "réflexion, sagesse, pensée profonde",
-            "Amour": "sentiment amoureux, relation amoureuse, cœur",
-            "Revolution": "changement, transformation sociale",
-            "Famille": "liens familiaux, proches, foyer",
-            "Motivation": "encouragement, inspiration, détermination",
-            "Tristesse": "mélancolie, chagrin, émotion difficile",
-            "Bonheur": "joie, contentement, bien-être",
-            "Travail": "métier, carrière, activité professionnelle",
-            "Vie": "existence, expérience humaine",
-            "Peur": "anxiété, stress, inquiétude, angoisse",
-            "Colere": "frustration, irritation, rage, énervement",
-            "Solitude": "isolement, seul, abandon",
-            "Confiance": "foi, assurance, sécurité",
-            "Espoir": "optimisme, attente positive, avenir",
-            "Doute": "incertitude, hésitation, questionnement",
-            "Corps": "physique, santé, bien-être corporel",
-            "Perdre": "perte, absence, manque",
-            "Réussite": "succès, accomplissement, victoire",
-            "Échec": "défaite, difficulté, revers",
-        }
-        context = category_contexts.get(category, category.lower())
-        parts.append(f"Thème: {context}")
-    
-    if author and author != "internaute":
-        parts.append(f"De {author}")
-    
-    return " | ".join(parts)
+    """Enrichit le texte avec priorité: contexte > tags > text > author pour matching émotionnel."""
+    text = (quote.get("Citation") or quote.get("text") or "").strip()
+    author = (quote.get("Auteur") or quote.get("author") or "").strip()
+    context = (quote.get("context") or quote.get("contexte") or "").strip()
+
+    tags = quote.get("tags") or []
+    if isinstance(tags, str):
+        tags = [tags]
+    if not isinstance(tags, list):
+        tags = []
+    tags_norm = [str(t).strip().lower() for t in tags if str(t).strip()]
+
+    # Ordre optimisé pour requêtes émotionnelles/narratives
+    parts = []
+    if context:
+        parts.append(f"Contexte: {context}")
+    if tags_norm:
+        parts.append(f"Tags: {', '.join(tags_norm)}")
+    if text:
+        parts.append(text)
+    if author:
+        parts.append(f"Auteur: {author}")
+
+    return "\n".join(parts)
 
 # Indexation
 client = chromadb.Client()
@@ -101,7 +85,7 @@ except:
 
 collection = client.create_collection(
     name=COLLECTION_NAME,
-    metadata={"description": "Citations MVP avec recherche sémantique"}
+    metadata={"description": "Citations MVP avec recherche sémantique (tags + contexte)"}
 )
 
 ids = []
@@ -110,17 +94,33 @@ metadatas = []
 enriched_texts = []
 
 for quote in citations:
-    ids.append(quote['id'])
-    original_text = quote.get('text', '')
+    # ID robuste
+    qid = quote.get('id')
+    if not qid:
+        qid = f"cit_{len(ids)}"
+    ids.append(str(qid))
+
+    original_text = (quote.get('Citation') or quote.get('text') or '')
     documents.append(original_text)
-    
-    # Métadonnées avec texte original pour l'affichage
+
+    # Métadonnées avec texte original + attributs utiles
+    author = (quote.get("Auteur") or quote.get("author") or "")
+    context = (quote.get("context") or quote.get("contexte") or "")
+    tags = quote.get("tags") or []
+    if isinstance(tags, str):
+        tags = [tags]
+    if not isinstance(tags, list):
+        tags = []
+    # Convertir tags en string (ChromaDB ne supporte pas les listes en métadonnées)
+    tags_str = ", ".join([str(t).strip() for t in tags if str(t).strip()])
+
     metadatas.append({
-        "author": (quote.get("author") or ""),
-        "category": (quote.get("category") or ""),
-        "original_text": original_text  # Garder le texte brut pour l'affichage
+        "author": author,
+        "tags": tags_str,
+        "context": context,
+        "original_text": original_text
     })
-    
+
     enriched_texts.append(create_enriched_text(quote))
 
 # Encoder les textes ENRICHIS
@@ -198,10 +198,11 @@ def search():
             results_out.append({
                 "id": quote_id,
                 "text": display_text,
-                "score": round(score, 4),  # Score réel de similarité
+                "score": round(score, 4),
                 "metadata": {
                     "author": metadata.get('author', ''),
-                    "category": metadata.get('category', '')
+                    "tags": metadata.get('tags', ''),  # String séparé par des virgules
+                    "context": metadata.get('context', '')
                 }
             })
         
