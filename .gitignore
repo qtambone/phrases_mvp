@@ -2,6 +2,7 @@
 .env.local
 
 # Environnement virtuel
+.venv/
 venv/
 env/
 
